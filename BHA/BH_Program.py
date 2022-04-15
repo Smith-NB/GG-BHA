@@ -186,7 +186,8 @@ class BasinHopping():
 		self.atoms = generate_random_structure(self.cluster_makeup, self.boxtoplaceinlength, self.vacuumAdd)
 		cluster = Cluster(composition=self.cluster_makeup, positions = self.atoms.get_positions(), cell = self.cell)
 		cluster.BH_energy = self.get_transformed_energy(self.atoms.get_positions())
-		cluster.relaxed_positions = self.atoms.get_positions()   
+		cluster.relaxed_positions = self.atoms.get_positions()
+		cluster.atoms = self.atoms.copy()
 		self.reseed_operator.E_to_beat = cluster.BH_energy
 		self.logfile.write("RESEED\n")
 		self.logfile.flush()
@@ -206,6 +207,9 @@ class BasinHopping():
 
 		if hasattr(self.search_strategy, 'population'):
 			self.search_strategy.population.controller.log_population_controller_resumption_info()
+
+		if hasattr(self.reseed_operator, 'blacklist'):
+			self.reseed_operator.blacklist.controller.log_population_controller_resumption_info()
 
 		
 

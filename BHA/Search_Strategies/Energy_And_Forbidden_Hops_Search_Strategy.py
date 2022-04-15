@@ -13,6 +13,7 @@ class Energy_And_Forbidden_Hops_Search_Strategy(Search_Strategy):
 		self.r_Cut = self.search_strategy_information['r_Cut']
 		self.reseed_operator_pointer = self.search_strategy_information['reseed_operator_pointer']
 
+		self.search_strategy_information['population_information']['client'] = "search_strategy"
 		self.search_strategy_information['population_information']['r_Cut'] = self.r_Cut
 		self.search_strategy_information['population_information']['population_controller_information']['reseed_operator_pointer'] = self.reseed_operator_pointer
 		self.population = Population(self.search_strategy_information['population_information'])

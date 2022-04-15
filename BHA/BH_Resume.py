@@ -24,12 +24,11 @@ def resume(self):
 			lock_remove()
 			exit()
 
-		to_print = ''
-		to_print += '\nSteps completed in previos run(s): ' + str(self.steps_completed)
-		to_print += '\nEmin found in previous run(s): ' + str(self.Emin)
-		to_print += '\nEmin found since last reseed: ' + str(self.reseed_operator.E_to_beat)
-		to_print += '\nSteps since a new LES was found from last reseed: ' + str(self.reseed_operator.steps_since_improvement)
-		print(to_print)
+		f.close()
+		f = open('information_for_resuming.txt', 'r')
+		for line in f:
+			print(line, end='')
+		f.close()
 	else:
 		print("Failed to resume properly.")
 		from BHA.Lock import lock_remove

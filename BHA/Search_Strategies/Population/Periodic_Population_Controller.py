@@ -59,7 +59,7 @@ class Periodic_Population_Controller(Population_Controller):
 
 	def log_population_controller_resumption_info(self):
 		f = open("information_for_resuming.txt", "a")
-		f.write('\nInformation for Periodic_Population_Controller\n')
+		f.write('\nInformation for Periodic_Population_Controller; client = %s\n' % self.client)
 		f.write('begin CNA profiles of premature_clusters\n')
 		if self.current_LES_since_last_update is not None:
 			self.premature_clusters.append(self.current_LES_since_last_update)
@@ -96,7 +96,7 @@ class Periodic_Population_Controller(Population_Controller):
 		f = open("information_for_resuming.txt", "r")
 		for i in range(5): f.readline() #skip first 5 lines
 		line = f.readline() 
-		if not line.startswith("Information for") or not line.strip().endswith("Periodic_Population_Controller"): #check population controller is correct
+		if not line.startswith("Information for") or not line.strip().endswith("Periodic_Population_Controller; client = %s" % self.client): #check population controller is correct
 			print("Failed to resume properly; population controller mismatch")
 			from BHA.Lock import lock_remove
 			lock_remove()

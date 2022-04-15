@@ -7,12 +7,16 @@ class Population():
 	def __init__(self, population_information):
 		self.population_information = population_information
 		self.check_population_information()
+		self.print_population_information()
 
-		self.size = population_information["size"]
-		self.similarity_mode = population_information["similarity_mode"]
+		self.size = self.population_information["size"]
+		self.similarity_mode = self.population_information["similarity_mode"]
 		self.similarity_of_cluster = self.get_similarity_calculation_method()
-		self.controller = get_population_controller(population_information["population_controller_information"])
-		self.r_Cut = population_information['r_Cut']
+		self.r_Cut = self.population_information['r_Cut']
+
+		self.population_information['population_controller_information']['client'] = self.population_information['client']
+		self.controller = get_population_controller(self.population_information["population_controller_information"])
+
 		self.cna_list = []
 		self.cna_list_length = 0
 		self.population_traj = Trajectory("population_history.traj", "a")
@@ -32,10 +36,12 @@ class Population():
 
 	def add_cluster(self, cluster):
 		#add cna profile to the list
+		if cluster is None:
+			print("CLUSTER NONE")
+			exit()
 		self.cna_list.append(cluster.CNA_profile)
 		self.population_traj.write(cluster.atoms)
 		print(str(cluster.UID) + " added to pop")
-		print(self.cna_list_length)
 		#if population is oversized, remove oldest cluster.
 		if self.cna_list_length >= self.size:
 			self.cna_list.pop(0)
@@ -50,7 +56,6 @@ class Population():
 
 		for cna in self.cna_list:
 			s = get_CNA_similarity(cluster_cna, cna)
-			print("test %f" % s)
 			if s > sigma:
 				sigma = s
 
@@ -98,6 +103,20 @@ class Population():
 			lock_remove()
 			exit()
 
+
+		if not 'client' in self.population_information:
+			error_msg = '\n'
+			error_msg += '--------------------------------------------------------\n'
+			error_msg += 'The client parameter is missing from the \n'
+			error_msg += 'population_information variable. This is NOT a user-side issue;\n'
+			error_msg += 'contact the developer. This variable should be set by the class\n'
+			error_msg += 'creating this instance of BHA.Search_Strategies.Population.\n'
+			error_msg += '--------------------------------------------------------\n'
+			print(error_msg)
+			from BHA.Lock import lock_remove
+			lock_remove()
+			exit()
+
 		if not isinstance(self.population_information['size'], int):
 			error_msg = '\n'
 			error_msg += '--------------------------------------------------------\n'
@@ -136,3 +155,10 @@ class Population():
 			from BHA.Lock import lock_remove
 			lock_remove()
 			exit()
+
+	def print_population_information(self):
+		to_print = ''
+		to_print += '\nPopulation cliend %s' % self.population_information['client']
+		to_print += '\nPopulation size: %d' % self.population_information['size']
+		to_print += '\nsimilarity mode: %s' % self.population_information['similarity_mode']
+

@@ -15,10 +15,11 @@ class Reseed_Population_Controller(Population_Controller):
 
 	def time_to_update(self, cluster):
 		if self.reseed_triggered_last_hop:
+			if self.current_LES_since_last_update is None:
+				self.current_LES_since_last_update = cluster
 			self.reseed_triggered_last_hop = False
 			self.cluster_to_append = self.current_LES_since_last_update
 			self.current_LES_since_last_update = None
-			print("TIMETOUPDATE")
 			return True
 
 		if self.current_LES_since_last_update is None or cluster.BH_energy < self.current_LES_since_last_update.BH_energy:
@@ -32,12 +33,11 @@ class Reseed_Population_Controller(Population_Controller):
 		return cluster_to_append
 
 	def notify_reseed_has_occured(self):
-		print("RPC-RESEEDING")
 		self.reseed_triggered_last_hop = True		
 
 	def log_population_controller_resumption_info(self):
 		f = open("information_for_resuming.txt", "a")
-		f.write('\nInformation for Reseed_Population_Controller\n')
+		f.write('\nInformation for Reseed_Population_Controller; client = %s\n' % self.client)
 		
 		if self.current_LES_since_last_update is not None:
 			f.write('Begin .xyz file formatted text for current_LES_since_last_update cluster:\n')
@@ -74,11 +74,19 @@ class Reseed_Population_Controller(Population_Controller):
 		f = open("information_for_resuming.txt", "r")
 		for i in range(5): f.readline() #skip first 5 lines
 		line = f.readline() 
-		if not line.startswith("Information for") or not line.strip().endswith("Reseed_Population_Controller"): #check population controller is correct
-			print("Failed to resume properly; population controller mismatch")
-			from BHA.Lock import lock_remove
-			lock_remove()
-			exit()
+		if not line.startswith("Information for") or not line.strip().endswith("Reseed_Population_Controller; client = %s" % self.client): #check population controller is 
+			found_correct_info_block = False
+			for l in f:
+				if l.startswith("Information for") and l.strip().endswith("Reseed_Population_Controller; client = %s" % self.client):
+					line = l
+					found_correct_info_block = True
+					break
+			if not found_correct_info_block:
+				print("Failed to resume properly; population controller mismatch")
+				from BHA.Lock import lock_remove
+				lock_remove()
+				exit()
+
 
 		line = f.readline()
 		if "There is no current_LES_since_last_update at this time." in line:
@@ -129,7 +137,7 @@ class Reseed_Population_Controller(Population_Controller):
 				self.current_LES_since_last_update.CNA_profile = [cna]
 				line = f.readline()
 
-		self.reseed_triggered_last_hop = bool(f.readline().split(':')[1].strip())
+		self.reseed_triggered_last_hop = f.readline().split(':')[1].strip() == "True"
 		
 
 	def check_population_controller_information(self):

@@ -26,6 +26,7 @@ class Energy_Plus_Population_SCM_Search_Strategy(Search_Strategy):
 		self.reseed_operator_pointer = self.search_strategy_information['reseed_operator_pointer']
 		self.search_strategy_information['population_information']['population_controller_information']['reseed_operator_pointer'] = self.reseed_operator_pointer
 
+		self.search_strategy_information['population_information']['client'] = "search_strategy"
 		self.search_strategy_information['population_information']['r_Cut'] = self.search_strategy_information['r_Cut']
 		self.population = Population(search_strategy_information['population_information'])
 
