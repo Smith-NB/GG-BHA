@@ -20,6 +20,10 @@ def get_reseed_operator(reseed_operator_information):
 		from BHA.Reseed_Operators.New_LES_Or_Blacklist_Reseed_Operator import New_LES_Or_Blacklist_Reseed_Operator
 		return New_LES_Or_Blacklist_Reseed_Operator(reseed_operator_information, None, None)
 
+	elif operator_name == 'new_LES_or_blacklist_alt':
+		from BHA.Reseed_Operators.New_LES_Or_Blacklist_Reseed_Operator_Alt import New_LES_Or_Blacklist_Reseed_Operator_Alt
+		return New_LES_Or_Blacklist_Reseed_Operator_Alt(reseed_operator_information, None, None)
+
 	elif operator_name == 'energy_lowered':
 		from BHA.Reseed_Operators.Energy_Lowered_Reseed_Operator import Energy_Lowered_Reseed_Operator
 		return Energy_Lowered_Reseed_Operator(reseed_operator_information, None, None)
