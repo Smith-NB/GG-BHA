@@ -1,7 +1,7 @@
 import numpy as np
 from BHA.Search_Strategies.Search_Strategy import Search_Strategy
 from BHA.Search_Strategies.Population.Population import Population
-
+from ase.io import Trajectory
 class Energy_And_Forbidden_Hops_Search_Strategy(Search_Strategy):
 
 	def __init__(self, search_strategy_information):
@@ -12,6 +12,14 @@ class Energy_And_Forbidden_Hops_Search_Strategy(Search_Strategy):
 		self.use_relaxed = self.search_strategy_information['use_relaxed']
 		self.r_Cut = self.search_strategy_information['r_Cut']
 		self.reseed_operator_pointer = self.search_strategy_information['reseed_operator_pointer']
+
+		try:
+			if self.search_strategy_information['record_forbidden_hop_strucures']:
+				self.forbidden_traj = Trajectory("forbidden_hops.traj", "w")
+			else:
+				self.forbidden_traj = None
+		except KeyError:
+			self.forbidden_traj = None
 
 		self.search_strategy_information['population_information']['client'] = "search_strategy"
 		self.search_strategy_information['population_information']['r_Cut'] = self.r_Cut
@@ -40,6 +48,8 @@ class Energy_And_Forbidden_Hops_Search_Strategy(Search_Strategy):
 
 		if self.sim is not None and self.sim >= self.sim_cut: #Reject hop if it is too similar to blacklist (forbidden hop)
 			print("Chance to accept = FORBIDDEN")
+			if self.forbidden_traj is not None:
+				self.forbidden_traj.write(cluster_new.atoms)
 			return False
 		elif cluster_new.BH_energy < cluster_old.BH_energy: #accept hop if it is not forbidden and is lower in energy
 			return True
