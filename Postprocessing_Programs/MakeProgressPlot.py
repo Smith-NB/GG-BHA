@@ -102,7 +102,7 @@ def main(argv):
 			trial_dirs.append("Trial%d/" % trial)
 	if rows != 0 and cols != 0:
 		fig, axs = plt.subplots(rows, cols, figsize=(10, 2*n_plots), sharey=True)
-		axs[0].set_ylabel("Similarity to GM (%)")
+		#axs[0].set_ylabel("Similarity to GM (%)")
 		#fig = plt.figure(figsize=(10, 2*n_plots))
 		#gs = fig.add_gridspec(1, 2, wspace=0)
 		#axs = gs.subplots(sharex=True, sharey=True)
