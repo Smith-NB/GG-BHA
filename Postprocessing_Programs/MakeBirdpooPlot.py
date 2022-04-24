@@ -46,7 +46,7 @@ def main(argv):
 	cmap_col = None
 	show_progress = False
 	try:
-		opts, args = getopt.getopt(argv,"hdpf:y:t:c:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=="])
+		opts, args = getopt.getopt(argv,"hdpf:y:t:c:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap="])
 	except getopt.GetoptError:
 		print_help()
 		sys.exit(2)
