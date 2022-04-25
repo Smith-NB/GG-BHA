@@ -114,15 +114,19 @@ def main(argv):
 			f.close()
 
 	df = pd.DataFrame(data=data)
+
 	if len(trial_nums) == 1:
 		plt.scatter(data=df, x='sim_to_GM', y='energy', s=1)
 	else:
 		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
+		
 		if cmap_col is None:
 			grid.map(plt.scatter, "sim_to_GM", "energy", s=1)
 		else:
 			grid.map(custom_scatter, "sim_to_GM", "energy", cmap_col, s=1, cmap=cmap)
+
 		grid.set_titles(col_template="")
+
 	if display:
 		plt.show()
 	else:

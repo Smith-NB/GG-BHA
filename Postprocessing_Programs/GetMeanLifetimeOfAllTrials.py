@@ -38,6 +38,15 @@ while dp_rounding is None:
 		print("Please use a integer value: ", end='')
 		dp_rounding = None
 
+print("Please input energy to look for: ", end='')
+target_energy = None
+while target_energy is None:
+	try: 
+		target_energy = float(input())
+	except ValueError:
+		print("Please use a integer value: ", end='')
+		target_energy = None
+
 
 num_mins = []
 e_mins = []
@@ -59,7 +68,13 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		for line in log:
 			if "RESEED" in line: continue
 			e = round(float(line.split()[3].strip().replace(',', '')), dp_rounding)
-			if e < e_min:
+			if e == target_energy:
+				e_min = e
+				e_min_step = int(line.split()[1].strip().replace(',', ''))
+				break
+			elif e < target_energy:
+				continue
+			elif e < e_min:
 				e_min = e
 				e_min_step = int(line.split()[1].strip().replace(',', ''))
 		e_mins.append(e_min)
