@@ -162,7 +162,7 @@ class BasinHopping():
 			## Check if all target clusters have been located. ##
 			if self.exit_when_targets_found:
 				for i in range(len(self.target_energies)):
-					if self.targets_found[i] != "False" and round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
+					if self.targets_found[i] == "False" and round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
 						self.targets_found[i] = step
 				if not False in self.targets_found:
 					print('All target clusters found based on energy.')
@@ -176,6 +176,9 @@ class BasinHopping():
 					for i in range(1, len(self.targets_found)):
 						print(', %d' % self.targets_found[i])
 					print()
+					self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, accept)
+					self.log_resumption_info(step, cluster_new.BH_energy)
+					break
 				"""
 				if round(self.Emin, self.rounding) == round(self.target_energies, self.rounding):   
 					print('GM Found at ' + str(self.target_energies) + ' eV.')
