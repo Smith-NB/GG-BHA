@@ -21,7 +21,6 @@ def resume(self):
 		self.hops_accepted_since_reseed = f.readline().split(':')[1] == "True"
 		
 		target_energies_check = f.readline().strip().split(':')[1].split(',')
-		print(target_energies_check)
 		for i in range(len(target_energies_check)):
 			target_energies_check[i] = float(target_energies_check[i])
 			if target_energies_check[i] != self.target_energies[i]:
@@ -35,9 +34,8 @@ def resume(self):
 
 
 		self.targets_found = f.readline().strip().split(':')[1].split(',')
-		print(self.targets_found)
 		for i in range(len(self.targets_found)):
-			self.targets_found[i] = False if self.targets_found[i] == "False" else int(self.target_energies[i])
+			self.targets_found[i] = False if self.targets_found[i] == "False" else int(self.targets_found[i])
 
 		if not False in self.targets_found:
 			print("\n--------------------------------\nThe target cluster(s) have already been located.\nThe basin hopping algorithm will exit without restarting.\n--------------------------------\n")
