@@ -20,6 +20,9 @@ def resume(self):
 		self.reseed_operator.steps_since_improvement = int(f.readline().split(':')[1])
 		self.hops_accepted_since_reseed = f.readline().split(':')[1] == "True"
 		
+		if not self.hops_accepted_since_reseed:
+			self.atoms = generate_random_structure(self.cluster_makeup, self.boxtoplaceinlength, self.vacuumAdd)
+
 		target_energies_check = f.readline().strip().split(':')[1].split(',')
 		for i in range(len(target_energies_check)):
 			target_energies_check[i] = float(target_energies_check[i])

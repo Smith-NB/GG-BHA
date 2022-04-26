@@ -163,7 +163,7 @@ class BasinHopping():
 			if self.exit_when_targets_found:
 				for i in range(len(self.target_energies)):
 					if self.targets_found[i] == False and round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
-						self.targets_found[i] = step
+						self.targets_found[i] = step + self.steps_completed
 				if not False in self.targets_found:
 					print('All target clusters found based on energy.')
 					
