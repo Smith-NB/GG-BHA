@@ -1,4 +1,4 @@
-from BHA.Get_Starting_Structure import get_latest_structure
+from BHA.Get_Starting_Structure import get_latest_structure, generate_random_structure
 from os import path
 from ase.io import read
 
@@ -18,8 +18,26 @@ def resume(self):
 		self.Emin_found_at = int(f.readline().split(':')[1])
 		self.reseed_operator.E_to_beat = float(f.readline().split(':')[1])
 		self.reseed_operator.steps_since_improvement = int(f.readline().split(':')[1])
-		if round(self.Emin, self.rounding) == round(self.target_energies, self.rounding):
-			print("\n--------------------------------\nThe GM has already been located.\nThe basin hopping algorithm will exit without restarting.\n--------------------------------\n")
+		self.hops_accepted_since_reseed = f.readline().split(':')[1] == "True"
+		
+		target_energies_check = f.readline().strip().split(':')[1].split(',')
+		for i in range(len(target_energies_check)):
+			target_energies_check[i] = float(target_energies_check[i])
+			if target_energies_check[i] != self.target_energies:
+				print("Failed to resume properly; the target energies in runBHA.py does not match that in")
+				print("the information_for_resuming.txt file. The algorithm is not currently designed to")
+				print("restart and look for new cluster(s) that differ from the original cluster(s).")
+				print("The algorithm will exit without having started")
+				from BHA.Lock import lock_remove
+				lock_remove()
+				exit()
+
+		self.targets_found = f.readline().strip().split(':')[1].split(',')
+		for i in range(len(self.targets_found)):
+			self.targets_found[i] = False if self.targets_found[i] == "False" else float(self.target_energies[i])
+
+		if not False in self.targets_found:
+			print("\n--------------------------------\nThe target cluster(s) have already been located.\nThe basin hopping algorithm will exit without restarting.\n--------------------------------\n")
 			from BHA.Lock import lock_remove
 			lock_remove()
 			exit()

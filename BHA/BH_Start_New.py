@@ -14,5 +14,12 @@ def start_new(self):
     self.reseed_operator.E_to_beat = self.Emin
     self.rmin = self.atoms.get_positions()
     self.positions = unrelaxed_positions.copy()
+    self.hops_accepted_since_reseed = True
     self.steps_completed = 0
     self.reseed_operator.steps_since_improvement = 0
+
+    self.targets_found = []
+    if self.exit_when_targets_found and self.target_energies is not None:
+        for i in range(len(self.target_energies)):
+            self.targets_found.append(False)
+            self.target_energies[i] = round(self.target_energies, self.rounding)

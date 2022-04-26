@@ -49,12 +49,6 @@ def initialise(self):
     #opens up a two way line of communication between the search strategy Object and the reseed operator Object 
     self.search_strategy_information['reseed_operator_pointer'] = self.reseed_operator
     self.search_strategy = get_search_strategy(self.search_strategy_information)
-    
-    self.targets_found = []
-    if self.exit_when_targets_found and self.target_energies is not None:
-        for i in range(len(self.target_energies)):
-            self.targets_found.append(False)
-            self.target_energies[i] = round(self.target_energies, self.rounding)
 
     self.cluster_chemical_formula = ''
     self.timer = Timer(self.total_length_of_running_time)

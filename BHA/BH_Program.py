@@ -144,6 +144,7 @@ class BasinHopping():
 
 			## If this step has been accepted, update cluster_old and log relevant info. ##
 			if accept:
+				self.hops_accepted_since_reseed = True
 				cluster_old = cluster_new
 				self.store_structure(self.lm_trajectory, self.atoms)
 				self.atoms.set_positions(cluster_new.positions)
@@ -153,12 +154,15 @@ class BasinHopping():
 				print(str(self.reseed_operator_information['steps_to_reseed']) + " steps have occured since the last improvement. reseeding.")
 				#self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, False)
 				cluster_old = self.restart_search_from_random_start()
+				self.hops_accepted_since_reseed = False
 				continue
+
+
 
 			## Check if all target clusters have been located. ##
 			if self.exit_when_targets_found:
 				for i in range(len(self.target_energies)):
-					if round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
+					if self.targets_found[i] != "False" and round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
 						self.targets_found[i] = step
 				if not False in self.targets_found:
 					print('All target clusters found based on energy.')
@@ -215,6 +219,14 @@ class BasinHopping():
 		f.write("\nMinimum_energy_found_at_step:" + str(self.Emin_found_at))
 		f.write("\nreseed_energy_to_beat:" + str(self.reseed_operator.E_to_beat))
 		f.write("\nSteps_since_improvement:" + str(self.reseed_operator.steps_since_improvement))
+		f.write("\nhops_accepted_since_reseed:" + str(self.hops_accepted_since_reseed))
+		f.write("\ntarget_energies:" + str(self.target_energies[0]))
+		for i in range(1, len(self.target_energies)):
+			f.write(","str(self.target_energies[i]))
+		
+		f.write("\ntargets_found:" + str(self.targets_found[0]))
+		for i in range(1, len(self.targets_found)):
+			f.write(1, len(self.targets_found[i]))ß
 		f.flush()
 		f.close()
 
