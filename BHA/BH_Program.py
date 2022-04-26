@@ -222,11 +222,11 @@ class BasinHopping():
 		f.write("\nhops_accepted_since_reseed:" + str(self.hops_accepted_since_reseed))
 		f.write("\ntarget_energies:" + str(self.target_energies[0]))
 		for i in range(1, len(self.target_energies)):
-			f.write(","str(self.target_energies[i]))
+			f.write("," + str(self.target_energies[i]))
 		
 		f.write("\ntargets_found:" + str(self.targets_found[0]))
 		for i in range(1, len(self.targets_found)):
-			f.write(1, len(self.targets_found[i]))ß
+			f.write(", " + str(self.targets_found[i]))
 		f.flush()
 		f.close()
 
