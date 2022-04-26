@@ -23,7 +23,7 @@ def resume(self):
 		target_energies_check = f.readline().strip().split(':')[1].split(',')
 		for i in range(len(target_energies_check)):
 			target_energies_check[i] = float(target_energies_check[i])
-			if target_energies_check[i] != self.target_energies:
+			if target_energies_check[i] != self.target_energies[i]:
 				print("Failed to resume properly; the target energies in runBHA.py does not match that in")
 				print("the information_for_resuming.txt file. The algorithm is not currently designed to")
 				print("restart and look for new cluster(s) that differ from the original cluster(s).")
