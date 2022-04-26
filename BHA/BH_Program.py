@@ -174,7 +174,7 @@ class BasinHopping():
 
 					print('targets_found: %d' % self.targets_found[0])
 					for i in range(1, len(self.targets_found)):
-						print(', %d' % self.targets_found[i])
+						print(', %d' % self.targets_found[i], end='')
 					print()
 					self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, accept)
 					self.log_resumption_info(step, cluster_new.BH_energy)
