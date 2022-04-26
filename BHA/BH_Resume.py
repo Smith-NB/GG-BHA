@@ -18,7 +18,7 @@ def resume(self):
 		self.Emin_found_at = int(f.readline().split(':')[1])
 		self.reseed_operator.E_to_beat = float(f.readline().split(':')[1])
 		self.reseed_operator.steps_since_improvement = int(f.readline().split(':')[1])
-		if round(self.Emin, self.rounding) == round(self.GM_energy, self.rounding):
+		if round(self.Emin, self.rounding) == round(self.target_energies, self.rounding):
 			print("\n--------------------------------\nThe GM has already been located.\nThe basin hopping algorithm will exit without restarting.\n--------------------------------\n")
 			from BHA.Lock import lock_remove
 			lock_remove()

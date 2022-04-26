@@ -65,18 +65,21 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		log = open("log.txt", "r")
 		e_min = float('inf')
 		e_min_step = 0
+		reseed_count = 0
 		for line in log:
-			if "RESEED" in line: continue
+			if "RESEED" in line: 
+				reseed_count += 1
+				continue
 			e = round(float(line.split()[3].strip().replace(',', '')), dp_rounding)
 			if e == target_energy:
 				e_min = e
-				e_min_step = int(line.split()[1].strip().replace(',', ''))
+				e_min_step = int(line.split()[1].strip().replace(',', '')) + reseed_count
 				break
 			elif e < target_energy:
 				continue
 			elif e < e_min:
 				e_min = e
-				e_min_step = int(line.split()[1].strip().replace(',', ''))
+				e_min_step = int(line.split()[1].strip().replace(',', '')) + reseed_count
 		e_mins.append(e_min)
 		num_mins.append(e_min_step)
 		trials.append(d)

@@ -72,7 +72,6 @@ class Reseed_Population_Controller(Population_Controller):
 		import shutil
 
 		f = open("information_for_resuming.txt", "r")
-		for i in range(5): f.readline() #skip first 5 lines
 		line = f.readline() 
 		if not line.startswith("Information for") or not line.strip().endswith("Reseed_Population_Controller; client = %s" % self.client): #check population controller is 
 			found_correct_info_block = False

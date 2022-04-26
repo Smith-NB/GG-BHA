@@ -47,10 +47,10 @@ class BasinHopping():
 	:type  optimizer_logfiele: str
 	:param search_strategy_information: All information for the search strategy to use. Default {'search_strategy': 'Energy'}
 	:type  search_strategy_information: dict
-	:param exit_when_GM_found: boolean for wether or not to exit the algorithm when the GM is found.
-	:type  exit_when_GM_found: bool
-	:param GM_energy: the energy of the GM.
-	:type  GM_energy: float
+	:param exit_when_targets_found: boolean for wether or not to exit the algorithm when the GM is found.
+	:type  exit_when_targets_found: bool
+	:param target_energies: the energy of the GM.
+	:type  target_energies: list of float or int
 	:param rounding: decimal places to round to for comparing cluster energy to GM. Default = 2
 	:type  rounding: int
 	:param adjust_cm: Something to do with centre of mass
@@ -68,8 +68,8 @@ class BasinHopping():
 				 optimizer_logfile=None,
 				 local_minima_trajectory='local_minima.traj',
 				 search_strategy_information={'search_strategy': 'energy', 'temperature': 1.0},
-				 exit_when_GM_found=False,
-				 GM_energy=None,
+				 exit_when_targets_found=False,
+				 target_energies=None,
 				 rounding=2,
 				 adjust_cm=True,
 				 total_length_of_running_time = 1
@@ -86,8 +86,8 @@ class BasinHopping():
 		self.optimizer_logfile = optimizer_logfile
 		self.lm_trajectory = local_minima_trajectory
 		self.search_strategy_information = search_strategy_information
-		self.exit_when_GM_found = exit_when_GM_found
-		self.GM_energy = GM_energy
+		self.exit_when_targets_found = exit_when_targets_found
+		self.target_energies = target_energies
 		self.rounding = rounding
 		self.adjust_cm = adjust_cm
 		self.total_length_of_running_time = total_length_of_running_time
@@ -132,16 +132,9 @@ class BasinHopping():
 				self.Emin = cluster_new.BH_energy
 				self.Emin_found_at = step + self.steps_completed
 				self.rmin = self.atoms.get_positions() #relaxed positions               
-				self.store_structure(self.lowest_trajectory, self.atoms)
-				##Check if new LES is the GM.##
-				if self.exit_when_GM_found:
-					if round(self.Emin, self.rounding) == round(self.GM_energy, self.rounding):   
-						print('GM Found at ' + str(self.GM_energy) + ' eV.')
-						self.store_structure(self.lm_trajectory, self.atoms)
-						self.atoms.set_positions(cluster_new.positions)
-						self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, True)
-						self.log_resumption_info(step, cluster_new.BH_energy)
-						break #End the algorithm
+				self.store_structure(self.lowest_trajectory, self.atoms)			
+					
+				
 			
 			## Accept the new structure if its a lower energy structure. ##
 			accept = self.search_strategy.get_acceptance_boolean(cluster_old, cluster_new)
@@ -151,13 +144,6 @@ class BasinHopping():
 
 			## If this step has been accepted, update cluster_old and log relevant info. ##
 			if accept:
-				"""
-				cluster_old.positions = cluster_new.positions.copy()
-				cluster_old.BH_energy = cluster_new.BH_energy
-				cluster_old.relaxed_positions = cluster_new.relaxed_positions.copy()
-				cluster_old.CNA_profile = cluster_new.CNA_profile
-				cluster_old.UID = cluster_new.UID
-				"""
 				cluster_old = cluster_new
 				self.store_structure(self.lm_trajectory, self.atoms)
 				self.atoms.set_positions(cluster_new.positions)
@@ -165,9 +151,36 @@ class BasinHopping():
 			## If reseeding is enabled and a new LES was not found. ##
 			if self.reseed_operator.time_to_reseed(cluster_old):
 				print(str(self.reseed_operator_information['steps_to_reseed']) + " steps have occured since the last improvement. reseeding.")
-				self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, False)
+				#self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, False)
 				cluster_old = self.restart_search_from_random_start()
 				continue
+
+			## Check if all target clusters have been located. ##
+			if self.exit_when_targets_found:
+				for i in range(len(self.target_energies)):
+					if round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
+						self.targets_found[i] = step
+				if not False in self.targets_found:
+					print('All target clusters found based on energy.')
+					
+					print('target_energies: %.2f' % self.target_energies[0], end='')
+					for i in range(1, len(self.target_energies)):
+						print(', %.2f' % self.target_energies[i], end='')
+					print()
+
+					print('targets_found: %d' % self.targets_found[0])
+					for i in range(1, len(self.targets_found)):
+						print(', %d' % self.targets_found[i])
+					print()
+				"""
+				if round(self.Emin, self.rounding) == round(self.target_energies, self.rounding):   
+					print('GM Found at ' + str(self.target_energies) + ' eV.')
+					self.store_structure(self.lm_trajectory, self.atoms)
+					self.atoms.set_positions(cluster_new.positions)
+					self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, True)
+					self.log_resumption_info(step, cluster_new.BH_energy)
+					break #End the algorithm
+				"""
 
 			if self.timer.has_elapsed_time():
 				print("\nRun time has exceeded specified walltime.")

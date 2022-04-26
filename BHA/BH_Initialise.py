@@ -46,12 +46,16 @@ def initialise(self):
 
     self.positions = self.atoms.get_positions() #sets positions to relaxed state of starting structure.
     self.cell = self.atoms.get_cell()
+    #opens up a two way line of communication between the search strategy Object and the reseed operator Object 
     self.search_strategy_information['reseed_operator_pointer'] = self.reseed_operator
     self.search_strategy = get_search_strategy(self.search_strategy_information)
     
-    #opens up a two way line of communication between the search strategy Object and the reseed operator Object 
-    
-    
+    self.targets_found = []
+    if self.exit_when_targets_found and self.target_energies is not None:
+        for i in range(len(self.target_energies)):
+            self.targets_found.append(False)
+            self.target_energies[i] = round(self.target_energies, self.rounding)
+
     self.cluster_chemical_formula = ''
     self.timer = Timer(self.total_length_of_running_time)
     for element, no_of_element in self.cluster_makeup.items():
@@ -139,9 +143,9 @@ def print_self_information(self):
     to_print += '\nBox to place in length: ' + str(self.boxtoplaceinlength)
     to_print += '\nVacuum Add: ' + str(self.vacuumAdd)
     to_print += '\nEnd algorithm when GM found? '
-    if self.exit_when_GM_found:
+    if self.exit_when_targets_found:
         to_print += 'Yes'
-        to_print += '\nGM Energy: ' + str(self.GM_energy) + ' eV'
+        to_print += '\nGM Energy: ' + str(self.target_energies) + ' eV'
         to_print += '\nGM Energy rounding: ' + str(self.rounding) + ' dp'
     else:
         to_print += 'No'

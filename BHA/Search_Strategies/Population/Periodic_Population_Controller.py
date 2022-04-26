@@ -94,13 +94,19 @@ class Periodic_Population_Controller(Population_Controller):
 		import shutil
 
 		f = open("information_for_resuming.txt", "r")
-		for i in range(5): f.readline() #skip first 5 lines
 		line = f.readline() 
-		if not line.startswith("Information for") or not line.strip().endswith("Periodic_Population_Controller; client = %s" % self.client): #check population controller is correct
-			print("Failed to resume properly; population controller mismatch")
-			from BHA.Lock import lock_remove
-			lock_remove()
-			exit()
+		if not line.startswith("Information for") or not line.strip().endswith("Periodic_Population_Controller; client = %s" % self.client): #check population controller is 
+			found_correct_info_block = False
+			for l in f:
+				if l.startswith("Information for") and l.strip().endswith("Periodic_Population_Controller; client = %s" % self.client):
+					line = l
+					found_correct_info_block = True
+					break
+			if not found_correct_info_block:
+				print("Failed to resume properly; population controller mismatch")
+				from BHA.Lock import lock_remove
+				lock_remove()
+				exit()
 
 		f.readline() #skip next line
 
