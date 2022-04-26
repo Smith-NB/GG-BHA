@@ -226,7 +226,7 @@ class BasinHopping():
 		
 		f.write("\ntargets_found:" + str(self.targets_found[0]))
 		for i in range(1, len(self.targets_found)):
-			f.write(", " + str(self.targets_found[i]))
+			f.write("," + str(self.targets_found[i]))
 		f.flush()
 		f.close()
 
