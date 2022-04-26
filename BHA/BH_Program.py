@@ -91,7 +91,7 @@ class BasinHopping():
 		self.rounding = rounding
 		self.adjust_cm = adjust_cm
 		self.total_length_of_running_time = total_length_of_running_time
-		print("v1.1.3")
+		print("v1.1.4")
 		initialise(self)
 
 	def run(self, steps):
