@@ -89,7 +89,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 				continue
 			e = round(float(line.strip().split()[3][:-1]), dp_rounding)
 			for target_energy in target_energies:
-				if e == target_energy and data[target_energy][-1] != False:
+				if e == target_energy and data[target_energy][-1] == False:
 					data[target_energy][-1] = int(line.strip().split()[1][:-1]) + n_reseeds
 
 		log.close()
