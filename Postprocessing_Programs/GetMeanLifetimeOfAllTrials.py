@@ -28,7 +28,6 @@ def linear_regression_confidene_interval(data, N0, confidence=0.95):
 	ci_tau = -tau * ci_rel
 	return tau, ci_tau
 
-f = open("_GetMeanLifetimeOfAllTrialsOutput.txt", "w")
 print("Please input energy rounding (dp): ", end='')
 dp_rounding = None
 while dp_rounding is None:
@@ -38,16 +37,30 @@ while dp_rounding is None:
 		print("Please use a integer value: ", end='')
 		dp_rounding = None
 
-print("Please input energy to look for: ", end='')
-target_energy = None
-while target_energy is None:
-	try: 
-		target_energy = float(input())
+print("Please input target energies to look for\n(comma delimted or leave blank for LES): ", end='')
+target_energies = None
+while target_energies is None:
+	target_energies = input().split(',')
+	try:
+		if target_energies == ['']:
+			target_energies = []
+		else:
+			for i in range(len(target_energies)):
+				target_energies[i] = float(round(target_energies[i], dp_rounding))
+
 	except ValueError:
-		print("Please use a integer value: ", end='')
-		target_energy = None
+		print("Please input only numerical values seperated solely by commas, or no input:")
+		target_energies = None
 
+if len(target_energies) == 0:
+	target_string = "LES"
+else:
+	target_string = ""
+	for i in range(len(target_energies)):
+		target_string += str(target_energies[i])
 
+fname = "_GetMeanLifetimeOfAllTrialsOutput_targets_%s.txt" % target_string
+f = open("_GetMeanLifetimeOfAllTrialsOutput.txt", "w")
 num_mins = []
 e_mins = []
 trials = []
@@ -119,6 +132,6 @@ f.write("Mean lifetime of %d successful trials: %.1f +- %.1f (calculated excludi
 f.write("------------------------------------------------------\n")
 f.write("------------------------------------------------------\n")
 f.close()
-f = open("_GetMeanLifetimeOfAllTrialsOutput.txt", "r")
+f = open("_GetMeanLifetimeOfAllTrialsOutput_.txt", "r")
 for line in f:
 	print(line, end='')
