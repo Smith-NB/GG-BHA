@@ -130,9 +130,8 @@ for target_energy in target_energies:
 	"""
 	f.write("\n------------------------------------------------------\n")
 	f.write("------------------------------------------------------\n")
-	f.write("Target: %f" % target_energy)
 	f.write("Overall Details\n")
-	f.write("LES: %.2f energy units\n" % overall_LES)
+	f.write("Target: %f\n" % target_energy)
 	f.write("No. of trials that discovered this LES: %d of %d\n" % (len(num_mins), len(data['trial'])))
 	f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
 	f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(tau, 1), round(tau_ci, 1)))
