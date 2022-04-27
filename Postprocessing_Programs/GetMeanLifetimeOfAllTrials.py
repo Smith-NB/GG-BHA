@@ -94,9 +94,9 @@ for roots, dirs, files in os.walk(os.getcwd()):
 
 		m = 0
 		for i in range(1, len(target_found_steps)):
-			if target_found_steps[i] < target_found_steps[m]:
+			if target_found_steps[i] > target_found_steps[m]:
 				m = i
-		last_target_found.append(m)
+		last_target_found.append(target_energies[m])
 		num_mins.append(target_found_steps[m])
 		trials.append(d)
 		log.close()
