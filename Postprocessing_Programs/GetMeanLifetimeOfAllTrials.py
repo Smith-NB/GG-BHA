@@ -114,6 +114,7 @@ for target_energy in target_energies:
 					if last_target_found[i] == overall_LES:
 						overall_LES_num_mins.append(num_mins[i])"""
 	num_mins = data[target_energy]
+	print(num_mins)
 	mean, mean_ci = mean_confidence_interval(num_mins)
 	tau, tau_ci = linear_regression_confidene_interval(num_mins, len(data['trial']))
 	alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(data['trial']))
