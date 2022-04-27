@@ -102,7 +102,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		data['last_encounter_time'].append(last_encounter_time)
 
 	break
-
+target_energies.append('last_encounter_time')
 for target_energy in target_energies:
 
 
@@ -113,7 +113,8 @@ for target_energy in target_energies:
 					#print("%s %d %f" % (trials[i], num_mins[i], last_target_found[i]))
 					if last_target_found[i] == overall_LES:
 						overall_LES_num_mins.append(num_mins[i])"""
-	num_mins = data[target_energy]
+	num_mins = data[target_energy].copy()
+	num_mins.sort()
 	print(num_mins)
 	mean, mean_ci = mean_confidence_interval(num_mins)
 	tau, tau_ci = linear_regression_confidene_interval(num_mins, len(data['trial']))
@@ -132,7 +133,7 @@ for target_energy in target_energies:
 	f.write("\n------------------------------------------------------\n")
 	f.write("------------------------------------------------------\n")
 	f.write("Overall Details\n")
-	f.write("Target: %f\n" % target_energy)
+	f.write("Target: %s\n" % str(target_energy))
 	f.write("No. of trials that discovered this LES: %d of %d\n" % (len(num_mins), len(data['trial'])))
 	f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
 	f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(tau, 1), round(tau_ci, 1)))
