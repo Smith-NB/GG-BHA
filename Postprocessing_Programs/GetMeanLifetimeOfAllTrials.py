@@ -95,10 +95,10 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		log.close()
 		last_encounter_time = 0
 		for target_energy in target_energies:
-			if data[target_energy] == False:
+			if data[target_energy][-1] == False:
 				last_encounter_time = float('nan')
-			elif data[target_energy] > last_encounter_time:
-				last_encounter_time = data[target_energy]
+			elif data[target_energy][-1] > last_encounter_time:
+				last_encounter_time = data[target_energy][-1]
 		data['last_encounter_time'].append(last_encounter_time)
 
 	break
