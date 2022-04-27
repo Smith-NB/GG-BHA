@@ -60,9 +60,9 @@ else:
 		target_string += str(target_energies[i])
 
 fname = "_GetMeanLifetimeOfAllTrialsOutput_targets_%s.txt" % target_string
-f = open("_GetMeanLifetimeOfAllTrialsOutput.txt", "w")
+f = open(fname, "w")
 num_mins = []
-e_mins = []
+last_target_found = []
 trials = []
 for roots, dirs, files in os.walk(os.getcwd()):
 	dirs.sort()
@@ -92,21 +92,24 @@ for roots, dirs, files in os.walk(os.getcwd()):
 					target_found_steps[i] = int(line.split()[1].strip().replace(',', '')) + reseed_count
 
 
-
-		e_mins.append(min(target_energies))
-		num_mins.append(max(target_found_steps))
+		m = 0
+		for i in range(1, len(target_found_steps)):
+			if target_found_steps[i] < target_found_steps[m]:
+				m = i
+		last_target_found.append(min(m))
+		num_mins.append(target_found_steps[m])
 		trials.append(d)
 		log.close()
 		os.chdir('..')
 
 	break
 print()
-e_mins, num_mins, trials = (list(x) for x in zip(*sorted(zip(e_mins, num_mins, trials))))
-overall_LES = e_mins[0]
+last_target_found, num_mins, trials = (list(x) for x in zip(*sorted(zip(last_target_found, num_mins, trials))))
+overall_LES = last_target_found[0]
 overall_LES_num_mins = []
 for i in range(len(num_mins)):
-	#print("%s %d %f" % (trials[i], num_mins[i], e_mins[i]))
-	if e_mins[i] == overall_LES:
+	#print("%s %d %f" % (trials[i], num_mins[i], last_target_found[i]))
+	if last_target_found[i] == overall_LES:
 		overall_LES_num_mins.append(num_mins[i])
 
 mean, mean_ci = mean_confidence_interval(overall_LES_num_mins)
@@ -114,7 +117,7 @@ tau, tau_ci = linear_regression_confidene_interval(overall_LES_num_mins, len(tri
 alt_tau, alt_tau_ci = linear_regression_confidene_interval(overall_LES_num_mins[:int(-len(overall_LES_num_mins)*0.1)], len(trials))
 
 f.write("Trial\tNo. mins\tLES Energy\n")
-for t, n, e in zip(trials, num_mins, e_mins):
+for t, n, e in zip(trials, num_mins, last_target_found):
 	f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
 f.write("------------------------------------------------------\n")
 f.write("------------------------------------------------------\n")
@@ -132,6 +135,6 @@ f.write("Mean lifetime of %d successful trials: %.1f +- %.1f (calculated excludi
 f.write("------------------------------------------------------\n")
 f.write("------------------------------------------------------\n")
 f.close()
-f = open("_GetMeanLifetimeOfAllTrialsOutput_.txt", "r")
+f = open(fname, "r")
 for line in f:
 	print(line, end='')
