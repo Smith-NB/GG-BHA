@@ -46,7 +46,7 @@ while target_energies is None:
 			target_energies = []
 		else:
 			for i in range(len(target_energies)):
-				target_energies[i] = float(round(target_energies[i], dp_rounding))
+				target_energies[i] = round(float(target_energies[i]), dp_rounding)
 
 	except ValueError:
 		print("Please input only numerical values seperated solely by commas, or no input:")
@@ -91,7 +91,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 				if e == target_energies[i] and not target_found_steps[i]:
 					target_found_steps[i] = int(line.split()[1].strip().replace(',', '')) + reseed_count
 
-		
+
 
 		e_mins.append(min(target_energies))
 		num_mins.append(max(target_found_steps))
