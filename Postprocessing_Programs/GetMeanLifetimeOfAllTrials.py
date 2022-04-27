@@ -79,22 +79,22 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		e_min = float('inf')
 		e_min_step = 0
 		reseed_count = 0
+		target_found_steps = []
+		for i in range(len(target_energies)):
+			target_found_steps.append(False)
 		for line in log:
 			if "RESEED" in line: 
 				reseed_count += 1
 				continue
 			e = round(float(line.split()[3].strip().replace(',', '')), dp_rounding)
-			if e == target_energy:
-				e_min = e
-				e_min_step = int(line.split()[1].strip().replace(',', '')) + reseed_count
-				break
-			elif e < target_energy:
-				continue
-			elif e < e_min:
-				e_min = e
-				e_min_step = int(line.split()[1].strip().replace(',', '')) + reseed_count
-		e_mins.append(e_min)
-		num_mins.append(e_min_step)
+			for i in range(len(target_energies)):
+				if e == target_energies[i] and not target_found_steps[i]:
+					target_found_steps[i] = int(line.split()[1].strip().replace(',', '')) + reseed_count
+
+		
+
+		e_mins.append(min(target_energies))
+		num_mins.append(max(target_found_steps))
 		trials.append(d)
 		log.close()
 		os.chdir('..')
