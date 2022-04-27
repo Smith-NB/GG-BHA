@@ -112,9 +112,9 @@ for i in range(len(num_mins)):
 	if last_target_found[i] == overall_LES:
 		overall_LES_num_mins.append(num_mins[i])
 
-mean, mean_ci = mean_confidence_interval(overall_LES_num_mins)
-tau, tau_ci = linear_regression_confidene_interval(overall_LES_num_mins, len(trials))
-alt_tau, alt_tau_ci = linear_regression_confidene_interval(overall_LES_num_mins[:int(-len(overall_LES_num_mins)*0.1)], len(trials))
+mean, mean_ci = mean_confidence_interval(num_mins)
+tau, tau_ci = linear_regression_confidene_interval(num_mins, len(trials))
+alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(trials))
 
 f.write("Trial\tNo. mins\tLES Energy\n")
 for t, n, e in zip(trials, num_mins, last_target_found):
@@ -122,15 +122,15 @@ for t, n, e in zip(trials, num_mins, last_target_found):
 f.write("------------------------------------------------------\n")
 f.write("------------------------------------------------------\n")
 f.write("Trials that have not completed yet:")
-for i in range(len(overall_LES_num_mins), len(trials)):
+for i in range(len(num_mins), len(trials)):
 	f.write("%s," % trials[i].replace("Trial", ""))
 f.write("\n------------------------------------------------------\n")
 f.write("------------------------------------------------------\n")
 f.write("Overall Details\n")
 f.write("LES: %.2f energy units\n" % overall_LES)
-f.write("No. of trials that discovered this LES: %d of %d\n" % (len(overall_LES_num_mins), len(trials)))
-f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(overall_LES_num_mins), round(mean, 1), round(mean_ci, 1)))
-f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(overall_LES_num_mins), round(tau, 1), round(tau_ci, 1)))
+f.write("No. of trials that discovered this LES: %d of %d\n" % (len(num_mins), len(trials)))
+f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
+f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(tau, 1), round(tau_ci, 1)))
 f.write("Mean lifetime of %d successful trials: %.1f +- %.1f (calculated excluding final 10 %% of completed trials)\n" % (len(overall_LES_num_mins), round(alt_tau, 1), round(alt_tau_ci, 1)))
 f.write("------------------------------------------------------\n")
 f.write("------------------------------------------------------\n")
