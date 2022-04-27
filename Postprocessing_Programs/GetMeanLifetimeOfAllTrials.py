@@ -2,6 +2,7 @@
 
 import os, sys
 import numpy as np
+from pandas import DataFrame
 import scipy.stats
 
 def mean_confidence_interval(data, confidence=0.95):
@@ -62,8 +63,15 @@ else:
 fname = "_GetMeanLifetimeOfAllTrialsOutput_targets_%s.txt" % target_string
 f = open(fname, "w")
 num_mins = []
-last_target_found = []
 trials = []
+target_found_steps = []
+for target_energy in target_energies:
+	data[target_energy] = []
+
+data = {'trial': [], 'last_encounter_time': []}
+for i in range(len(target_energies)):
+	data[target_energies[i]] = []
+
 for roots, dirs, files in os.walk(os.getcwd()):
 	dirs.sort()
 	for d in dirs:
@@ -74,66 +82,68 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		sys.stdout.write("\rParsing %s" % d)
 		sys.stdout.flush()
 
-		os.chdir(d)
-		log = open("log.txt", "r")
-		e_min = float('inf')
-		e_min_step = 0
-		reseed_count = 0
-		target_found_steps = []
-		for i in range(len(target_energies)):
-			target_found_steps.append(False)
+		data['trial'].append(d)
+		for target_energy in target_energies:
+			data[target_energy].append(False)
+
+		log = open("%s/log.txt" % d, "r")
+		n_reseeds = 0
 		for line in log:
 			if "RESEED" in line: 
-				reseed_count += 1
+				n_reseeds += 1
 				continue
-			e = round(float(line.split()[3].strip().replace(',', '')), dp_rounding)
-			for i in range(len(target_energies)):
-				if e == target_energies[i] and not target_found_steps[i]:
-					target_found_steps[i] = int(line.split()[1].strip().replace(',', '')) + reseed_count
+			e = round(float(line.strip().split()[3][:-1]), dp_rounding)
+			for target_energy in target_energies:
+				if e == target_energy and data[target_energy][-1] != False:
+					data[target_energy][-1] = int(line.strip().split()[1][:-1]) + n_reseeds
 
-
-		m = 0
-		for i in range(1, len(target_found_steps)):
-			if target_found_steps[i] > target_found_steps[m]:
-				m = i
-		last_target_found.append(target_energies[m])
-		num_mins.append(target_found_steps[m])
-		trials.append(d)
 		log.close()
-		os.chdir('..')
+		last_encounter_time = 0
+		for target_energy in target_energies:
+			if data[target_energy] == False:
+				last_encounter_time = float('nan')
+			elif data[target_energy] > last_encounter_time:
+				last_encounter_time = data[target_energy]
+		data['last_encounter_time'].append(last_encounter_time)
 
 	break
-print()
-last_target_found, num_mins, trials = (list(x) for x in zip(*sorted(zip(last_target_found, num_mins, trials))))
-overall_LES = last_target_found[0]
-overall_LES_num_mins = []
-for i in range(len(num_mins)):
-	#print("%s %d %f" % (trials[i], num_mins[i], last_target_found[i]))
-	if last_target_found[i] == overall_LES:
-		overall_LES_num_mins.append(num_mins[i])
 
-mean, mean_ci = mean_confidence_interval(num_mins)
-tau, tau_ci = linear_regression_confidene_interval(num_mins, len(trials))
-alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(trials))
+for target_energy in target_energies:
 
-f.write("Trial\tNo. mins\tLES Energy\n")
-for t, n, e in zip(trials, num_mins, last_target_found):
-	f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
-f.write("------------------------------------------------------\n")
-f.write("------------------------------------------------------\n")
-f.write("Trials that have not completed yet:")
-for i in range(len(num_mins), len(trials)):
-	f.write("%s," % trials[i].replace("Trial", ""))
-f.write("\n------------------------------------------------------\n")
-f.write("------------------------------------------------------\n")
-f.write("Overall Details\n")
-f.write("LES: %.2f energy units\n" % overall_LES)
-f.write("No. of trials that discovered this LES: %d of %d\n" % (len(num_mins), len(trials)))
-f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
-f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(tau, 1), round(tau_ci, 1)))
-f.write("Mean lifetime of %d successful trials: %.1f +- %.1f (calculated excluding final 10 %% of completed trials)\n" % (len(overall_LES_num_mins), round(alt_tau, 1), round(alt_tau_ci, 1)))
-f.write("------------------------------------------------------\n")
-f.write("------------------------------------------------------\n")
+
+	"""last_target_found, num_mins, trials = (list(x) for x in zip(*sorted(zip(last_target_found, num_mins, trials))))
+				overall_LES = last_target_found[0]
+				overall_LES_num_mins = []
+				for i in range(len(num_mins)):
+					#print("%s %d %f" % (trials[i], num_mins[i], last_target_found[i]))
+					if last_target_found[i] == overall_LES:
+						overall_LES_num_mins.append(num_mins[i])"""
+	num_mins = data[target_energy]
+	mean, mean_ci = mean_confidence_interval(num_mins)
+	tau, tau_ci = linear_regression_confidene_interval(num_mins, len(trials))
+	alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(trials))
+
+	"""
+	f.write("Trial\tNo. mins\tLES Energy\n")
+	for t, n, e in zip(trials, num_mins, last_target_found):
+		f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
+	f.write("------------------------------------------------------\n")
+	f.write("------------------------------------------------------\n")
+	f.write("Trials that have not completed yet:")
+	for i in range(len(num_mins), len(trials)):
+		f.write("%s," % trials[i].replace("Trial", ""))
+	"""
+	f.write("\n------------------------------------------------------\n")
+	f.write("------------------------------------------------------\n")
+	f.write("Target: %f" % target_energy)
+	f.write("Overall Details\n")
+	f.write("LES: %.2f energy units\n" % overall_LES)
+	f.write("No. of trials that discovered this LES: %d of %d\n" % (len(num_mins), len(trials)))
+	f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
+	f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(tau, 1), round(tau_ci, 1)))
+	f.write("Mean lifetime of %d successful trials: %.1f +- %.1f (calculated excluding final 10 %% of completed trials)\n" % (len(overall_LES_num_mins), round(alt_tau, 1), round(alt_tau_ci, 1)))
+	f.write("------------------------------------------------------\n")
+	f.write("------------------------------------------------------\n")
 f.close()
 f = open(fname, "r")
 for line in f:
