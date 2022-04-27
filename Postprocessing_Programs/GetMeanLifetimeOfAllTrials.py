@@ -5,19 +5,19 @@ import numpy as np
 from pandas import DataFrame
 import scipy.stats
 
-def mean_confidence_interval(data, confidence=0.95):
-	a = 1.0 * np.array(data)
+def mean_confidence_interval(datum, confidence=0.95):
+	a = 1.0 * np.array(datum)
 	n = len(a)
 	m, se = np.mean(a), scipy.stats.sem(a)
 	ci = se * scipy.stats.t.ppf((1 + confidence) / 2., n-2)
 	return m, ci
 
-def linear_regression_confidene_interval(data, N0, confidence=0.95):
+def linear_regression_confidene_interval(datum, N0, confidence=0.95):
 	#If trials are all complete
-	if len(data) == N0:
-		x = data[:-1] #discount final trial, as N(t) == 0 and ln(N(t)) == ln(0) == UNDEFINED
+	if len(datum) == N0:
+		x = datum[:-1] #discount final trial, as N(t) == 0 and ln(N(t)) == ln(0) == UNDEFINED
 	else:
-		x = data
+		x = datum
 	y = [] #N(t), i.e. number of trials remaining
 	for i in range(len(x)):
 		y.append(np.log(N0-i-1))
@@ -62,15 +62,10 @@ else:
 
 fname = "_GetMeanLifetimeOfAllTrialsOutput_targets_%s.txt" % target_string
 f = open(fname, "w")
-num_mins = []
-trials = []
+data = {'trial': [], 'last_encounter_time': []}
 target_found_steps = []
 for target_energy in target_energies:
 	data[target_energy] = []
-
-data = {'trial': [], 'last_encounter_time': []}
-for i in range(len(target_energies)):
-	data[target_energies[i]] = []
 
 for roots, dirs, files in os.walk(os.getcwd()):
 	dirs.sort()
