@@ -96,15 +96,15 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		if len(target_energies) > 1: 
 			last_encounter_time = 0
 			last_encounter_target = None
-				for target_energy in target_energies:
-					if data[target_energy][-1] == False:
-						last_encounter_time = float('nan')
-						last_encounter_target = None
-					elif data[target_energy][-1] > last_encounter_time:
-						last_encounter_time = data[target_energy][-1]
-						last_encounter_target = target_energy
-				data['last_encounter_time'].append(last_encounter_time)
-				data['last_encounter_target'].append(last_encounter_target)
+			for target_energy in target_energies:
+				if data[target_energy][-1] == False:
+					last_encounter_time = float('nan')
+					last_encounter_target = None
+				elif data[target_energy][-1] > last_encounter_time:
+					last_encounter_time = data[target_energy][-1]
+					last_encounter_target = target_energy
+			data['last_encounter_time'].append(last_encounter_time)
+			data['last_encounter_target'].append(last_encounter_target)
 	break
 
 trial_list = data['trial'].copy()
