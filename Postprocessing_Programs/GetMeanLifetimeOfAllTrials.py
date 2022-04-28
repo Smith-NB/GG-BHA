@@ -105,7 +105,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 
 target_data = []
 for target_energy in target_energies:
-	target_data.append(data(target_energy))
+	target_data.append(data[target_energy])
 
 sorteddata = (list(x) for x in zip(*sorted(zip(data['trial'], data['last_encounter_time'], **target_data))))
 print(sorteddata)
