@@ -113,10 +113,14 @@ if len(target_energies) > 1:
 	target_list = data['last_encounter_target'].copy()
 	mins_list, target_list, trial_list = (list(x) for x in zip(*sorted(zip(mins_list, target_list, trial_list))))
 	target_energies.append('last_encounter_time')
+	f.write("Trial\tNo. mins\tLES Energy\n")
+	for t, n, e in zip(trial_list, mins_list, target_list):
+		f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
 else:
 	mins_list = data[target_energies[0]].copy()
 	mins_list, trial_list = (list(x) for x in zip(*sorted(zip(mins_list, trial_list))))
-
+	for t, n in zip(trial_list, mins_list):
+		f.write("%9s\t%8d\n" % (t, n))
 
 for target_energy in target_energies:
 
