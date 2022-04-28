@@ -62,7 +62,7 @@ else:
 
 fname = "_GetMeanLifetimeOfAllTrialsOutput_targets_%s.txt" % target_string
 f = open(fname, "w")
-data = {'trial': [], 'last_encounter_time': []}
+data = {'trial': [], 'last_encounter_time': [], 'last_encounter_target': []}
 target_found_steps = []
 for target_energy in target_energies:
 	data[target_energy] = []
