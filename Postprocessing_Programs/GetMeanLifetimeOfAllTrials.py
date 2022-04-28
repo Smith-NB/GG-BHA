@@ -93,29 +93,31 @@ for roots, dirs, files in os.walk(os.getcwd()):
 					data[target_energy][-1] = int(line.strip().split()[1][:-1]) + n_reseeds
 
 		log.close()
-		last_encounter_time = 0
-		for target_energy in target_energies:
-			if data[target_energy][-1] == False:
-				last_encounter_time = float('nan')
-			elif data[target_energy][-1] > last_encounter_time:
-				last_encounter_time = data[target_energy][-1]
-		data['last_encounter_time'].append(last_encounter_time)
-
+		if len(target_energies) > 1: 
+			last_encounter_time = 0
+			last_encounter_target = None
+				for target_energy in target_energies:
+					if data[target_energy][-1] == False:
+						last_encounter_time = float('nan')
+						last_encounter_target = None
+					elif data[target_energy][-1] > last_encounter_time:
+						last_encounter_time = data[target_energy][-1]
+						last_encounter_target = target_energy
+				data['last_encounter_time'].append(last_encounter_time)
+				data['last_encounter_target'].append(last_encounter_target)
 	break
 
-target_data = []
-for target_energy in target_energies:
-	target_data.append(data[target_energy])
+trial_list = data['trial'].copy()
+if len(target_energies) > 1:
+	mins_list = data['last_encounter_time'].copy()
+	target_list = data['last_encounter_target'].copy()
+	mins_list, target_list, trial_list = (list(x) for x in zip(*sorted(zip(mins_list, target_list, trial_list))))
+	target_energies.append('last_encounter_time')
+else:
+	mins_list = data[target_energies[0]].copy()
+	mins_list, trial_list = (list(x) for x in zip(*sorted(zip(mins_list, trial_list))))
 
-sorteddata = (list(x) for x in zip(*sorted(zip(data['last_encounter_time'], data['trial'], *target_data))))
 
-for i in range(len(sorteddata[0])):
-	f.write("%s\t%d" % (sorteddata[1][i], sorteddata[0][i]))
-	for j in range(target_energies):
-		f.write("\t%f" % sorteddata[j][i])
-		f.write('\n')
-
-target_energies.append('last_encounter_time')
 for target_energy in target_energies:
 
 
