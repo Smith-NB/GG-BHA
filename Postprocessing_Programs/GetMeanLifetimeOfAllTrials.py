@@ -102,6 +102,11 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		data['last_encounter_time'].append(last_encounter_time)
 
 	break
+
+sorteddata = (list(x) for x in zip(*sorted(zip(**data))))
+print(sorteddata)
+
+
 target_energies.append('last_encounter_time')
 for target_energy in target_energies:
 
