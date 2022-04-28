@@ -107,9 +107,13 @@ target_data = []
 for target_energy in target_energies:
 	target_data.append(data[target_energy])
 
-sorteddata = (list(x) for x in zip(*sorted(zip(data['trial'], data['last_encounter_time'], *target_data))))
-print(sorteddata)
+sorteddata = (list(x) for x in zip(*sorted(zip(data['last_encounter_time'], data['trial'], *target_data))))
 
+for i in range(len(sorteddata[0])):
+	f.write("%s\t%d" % (sorteddata[1][i], sorteddata[0][i]))
+	for j in range(target_energies):
+		f.write("\t%f" % sorteddata[j][i])
+		f.write('\n')
 
 target_energies.append('last_encounter_time')
 for target_energy in target_energies:
@@ -124,7 +128,6 @@ for target_energy in target_energies:
 						overall_LES_num_mins.append(num_mins[i])"""
 	num_mins = data[target_energy].copy()
 	num_mins.sort()
-	print(num_mins)
 	mean, mean_ci = mean_confidence_interval(num_mins)
 	tau, tau_ci = linear_regression_confidene_interval(num_mins, len(data['trial']))
 	alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(data['trial']))
