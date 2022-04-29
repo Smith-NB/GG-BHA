@@ -115,7 +115,10 @@ if len(target_energies) > 1:
 	target_energies.append('last_encounter_time')
 	f.write("Trial\tNo. mins\tLES Energy\n")
 	for t, n, e in zip(trial_list, mins_list, target_list):
-		f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
+		try:
+			f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
+		except ValueError:
+			f.write("%9s\t%s\n" % (t, "Incomplete"))
 else:
 	mins_list = data[target_energies[0]].copy()
 	mins_list, trial_list = (list(x) for x in zip(*sorted(zip(mins_list, trial_list))))
