@@ -118,7 +118,7 @@ if len(target_energies) > 1:
 	for t, n, e in zip(trial_list, mins_list, target_list):
 		try:
 			f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
-		except ValueError:
+		except (TypeError, ValueError):
 			f.write("%9s\t%s\n" % (t, "Incomplete"))
 else:
 	mins_list = data[target_energies[0]].copy()
