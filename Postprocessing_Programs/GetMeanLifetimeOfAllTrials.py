@@ -100,6 +100,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 				if data[target_energy][-1] == False:
 					last_encounter_time = False
 					last_encounter_target = None
+					break
 				elif data[target_energy][-1] > last_encounter_time:
 					last_encounter_time = data[target_energy][-1]
 					last_encounter_target = target_energy
