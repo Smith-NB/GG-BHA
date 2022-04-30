@@ -98,7 +98,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 			last_encounter_target = None
 			for target_energy in target_energies:
 				if data[target_energy][-1] == False:
-					last_encounter_time = float('nan')
+					last_encounter_time = False
 					last_encounter_target = None
 				elif data[target_energy][-1] > last_encounter_time:
 					last_encounter_time = data[target_energy][-1]
@@ -136,6 +136,11 @@ for target_energy in target_energies:
 					if last_target_found[i] == overall_LES:
 						overall_LES_num_mins.append(num_mins[i])"""
 	num_mins = data[target_energy].copy()
+	try:
+		while True:
+			num_mins.remove(False)
+	except ValueError:
+		pass
 	num_mins.sort()
 	mean, mean_ci = mean_confidence_interval(num_mins)
 	tau, tau_ci = linear_regression_confidene_interval(num_mins, len(data['trial']))
@@ -155,8 +160,8 @@ for target_energy in target_energies:
 	f.write("------------------------------------------------------\n")
 	f.write("Overall Details\n")
 	f.write("Target: %s\n" % str(target_energy))
-	f.write("No. of trials that discovered this LES: %d of %d\n" % (len(num_mins), len(data['trial'])))
-	f.write("Mean no. of mins needed to find this LES of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
+	f.write("No. of trials that discovered this target: %d of %d\n" % (len(num_mins), len(data['trial'])))
+	f.write("Mean no. of mins needed to find this target of the %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(mean, 1), round(mean_ci, 1)))
 	f.write("Mean lifetime of %d successful trials: %.1f +- %.1f\n" % (len(num_mins), round(tau, 1), round(tau_ci, 1)))
 	f.write("Mean lifetime of %d successful trials: %.1f +- %.1f (calculated excluding final 10 %% of completed trials)\n" % (len(num_mins), round(alt_tau, 1), round(alt_tau_ci, 1)))
 	f.write("------------------------------------------------------\n")
