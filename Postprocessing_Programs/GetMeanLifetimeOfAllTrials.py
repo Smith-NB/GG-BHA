@@ -130,7 +130,7 @@ else:
 if len(incomplete_trials) > 0:
 	f.write("Incomplete trials: %d" % incomplete_trials[0])
 	for i in range(len(incomplete_trials)):
-		f.write(", %d" % incomplete_trials[i])
+		f.write(",%d" % incomplete_trials[i])
 
 for target_energy in target_energies:
 
