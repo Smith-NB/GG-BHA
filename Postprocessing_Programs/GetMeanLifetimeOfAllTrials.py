@@ -128,9 +128,9 @@ else:
 	for t, n in zip(trial_list, mins_list):
 		f.write("%9s\t%8d\n" % (t, n))
 if len(incomplete_trials) > 0:
-	f.write("Incomplete trials: %d", % incomplete_trials[0])
+	f.write("Incomplete trials: %d" % incomplete_trials[0])
 	for i in range(len(incomplete_trials)):
-		f.write(", %d", % incomplete_trials[i])
+		f.write(", %d" % incomplete_trials[i])
 
 for target_energy in target_energies:
 
