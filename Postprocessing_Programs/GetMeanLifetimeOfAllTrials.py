@@ -109,6 +109,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 	break
 
 trial_list = data['trial'].copy()
+incomplete_trials = []
 if len(target_energies) > 1:
 	mins_list = data['last_encounter_time'].copy()
 	target_list = data['last_encounter_target'].copy()
@@ -120,11 +121,16 @@ if len(target_energies) > 1:
 			f.write("%9s\t%8d\t%6.2f\n" % (t, n, e))
 		except (TypeError, ValueError):
 			f.write("%9s\t%s\n" % (t, "Incomplete"))
+			incomplete_trials.append(int(t.replace("Trial", "")))
 else:
 	mins_list = data[target_energies[0]].copy()
 	mins_list, trial_list = (list(x) for x in zip(*sorted(zip(mins_list, trial_list))))
 	for t, n in zip(trial_list, mins_list):
 		f.write("%9s\t%8d\n" % (t, n))
+if len(incomplete_trials) > 0:
+	f.write("Incomplete trials: %d", % incomplete_trials[0])
+	for i in range(len(incomplete_trials)):
+		f.write(", %d", % incomplete_trials[i])
 
 for target_energy in target_energies:
 
