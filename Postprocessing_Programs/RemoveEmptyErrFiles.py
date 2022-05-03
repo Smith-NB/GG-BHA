@@ -12,8 +12,7 @@ for root, dirs, files in os.walk(os.getcwd()):
 				to_rm.append(fpath)
 				count += 1
 
-print("%d files are marked for deletion. If this sounds correct, please input the following:" % count)
-print("\t\'DELETE%d\'" % count)
+print("%d files are marked for deletion. If this sounds correct, please input the following: DELETE%d" % (count, count))
 code = input()
 if code == "DELETE%d" % count:
 	for f in to_rm:
