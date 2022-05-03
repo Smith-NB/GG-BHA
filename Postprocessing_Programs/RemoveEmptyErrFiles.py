@@ -12,14 +12,16 @@ for root, dirs, files in os.walk(os.getcwd()):
 				to_rm.append(fpath)
 				count += 1
 
-print("%d files are marked for deletion. If this sounds correct, please input the following: DELETE%d" % (count, count))
-code = input()
-if code == "DELETE%d" % count:
-	for f in to_rm:
-		os.remove(fpath)
-	print("%d files deleted." % count)
+if count > 0
+	print("%d files are marked for deletion. If this sounds correct, please input the following: DELETE%d" % (count, count))
+	code = input()
+	if code == "DELETE%d" % count:
+		for f in to_rm:
+			os.remove(fpath)
+		print("%d files deleted." % count)
+	else:
+		print("No files were deleted.")
 else:
-	print("No files were deleted.")
-
+	print("0 files were marked for deletion. Exiting program.")
 
 
