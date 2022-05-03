@@ -4,8 +4,9 @@ import os, sys
 
 count = 0
 for roots, dirs, files in os.walk(os.getcwd()):
-	if f.startswith("arrayJob_") and f.endswith(".err"):
-		print(f)
-		count += 1
+	for f in files:
+		if f.startswith("arrayJob_") and f.endswith(".err"):
+			print(f)
+			count += 1
 
 print(count)
