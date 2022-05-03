@@ -16,9 +16,8 @@ if count > 0:
 	print("%d files are marked for deletion. If this sounds correct, please input the following: DELETE%d" % (count, count))
 	code = input()
 	if code == "DELETE%d" % count:
-		print(to_rm)
 		for f in to_rm:
-			os.remove(fpath)
+			os.remove(f)
 		print("%d files deleted." % count)
 	else:
 		print("No files were deleted.")
