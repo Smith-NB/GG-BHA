@@ -149,16 +149,6 @@ class BasinHopping():
 				self.store_structure(self.lm_trajectory, self.atoms)
 				self.atoms.set_positions(cluster_new.positions)
 
-			## If reseeding is enabled and a new LES was not found. ##
-			if self.reseed_operator.time_to_reseed(cluster_old):
-				print(str(self.reseed_operator_information['steps_to_reseed']) + " steps have occured since the last improvement. reseeding.")
-				#self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, False)
-				cluster_old = self.restart_search_from_random_start()
-				self.hops_accepted_since_reseed = False
-				continue
-
-
-
 			## Check if all target clusters have been located. ##
 			if self.exit_when_targets_found:
 				for i in range(len(self.target_energies)):
@@ -188,6 +178,15 @@ class BasinHopping():
 					self.log_resumption_info(step, cluster_new.BH_energy)
 					break #End the algorithm
 				"""
+
+			## If reseeding is enabled and a new LES was not found. ##
+			if self.reseed_operator.time_to_reseed(cluster_old):
+				print(str(self.reseed_operator_information['steps_to_reseed']) + " steps have occured since the last improvement. reseeding.")
+				#self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, False)
+				cluster_old = self.restart_search_from_random_start()
+				self.hops_accepted_since_reseed = False
+				continue
+
 
 			if self.timer.has_elapsed_time():
 				print("\nRun time has exceeded specified walltime.")
