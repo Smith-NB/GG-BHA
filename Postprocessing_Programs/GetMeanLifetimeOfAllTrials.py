@@ -151,7 +151,11 @@ for target_energy in target_energies:
 	num_mins.sort()
 	mean, mean_ci = mean_confidence_interval(num_mins)
 	tau, tau_ci = linear_regression_confidene_interval(num_mins, len(data['trial']))
-	alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(data['trial']))
+	try:
+		alt_tau, alt_tau_ci = linear_regression_confidene_interval(num_mins[:int(-len(num_mins)*0.1)], len(data['trial']))
+	except ValueError:
+		alt_tau = tau
+		alt_tau_ci = tau_ci
 
 	"""
 	f.write("Trial\tNo. mins\tLES Energy\n")
