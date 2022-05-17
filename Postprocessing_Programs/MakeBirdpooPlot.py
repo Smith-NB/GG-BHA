@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os, sys, getopt
-from Postprocessing_Programs.MakeSimToGM import MakeSimToGM
+#from Postprocessing_Programs.MakeSimToGM import MakeSimToGM
 
 def print_help():
 	help_string = 'MakePlot.py [-o] [--options]\n'
@@ -87,7 +87,7 @@ def main(argv):
 		
 
 		if not os.path.exists("Trial%d/sim_to_GM.txt" % t):
-			MakeSimToGM("Trial%d" % t)
+			pass#MakeSimToGM("Trial%d" % t)
 
 		if show_progress:
 			sys.stdout.write("\rParsing Trial%d                                " % t)
