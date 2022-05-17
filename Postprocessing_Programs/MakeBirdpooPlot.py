@@ -114,8 +114,6 @@ def main(argv):
 			#remove final line
 			for key in ['energy', 'hop_num', 'accepted_hop_num']: data[key].pop()
 			f.close()
-	for key in data:
-		print(len(data[key]))
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
