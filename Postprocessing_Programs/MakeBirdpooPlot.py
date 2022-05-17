@@ -111,6 +111,8 @@ def main(argv):
 					data['hop_num'].append(int(line.split()[1][:-1]))
 					data['accepted_hop_num'].append(accepted_hop_num)
 					accepted_hop_num += 1
+			#remove final line
+			for key in ['energy', 'hop_num', 'accepted_hop_num']: data[key].pop()
 			f.close()
 	for key in data:
 		print(len(data[key]))
