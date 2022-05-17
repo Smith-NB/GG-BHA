@@ -112,7 +112,8 @@ def main(argv):
 					data['accepted_hop_num'].append(accepted_hop_num)
 					accepted_hop_num += 1
 			f.close()
-
+	for key in data:
+		print(len(data[key]))
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
