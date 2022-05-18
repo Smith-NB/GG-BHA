@@ -112,7 +112,9 @@ def main(argv):
 					data['accepted_hop_num'].append(accepted_hop_num)
 					accepted_hop_num += 1
 			#remove final line
-			for key in ['energy', 'hop_num', 'accepted_hop_num']: data[key].pop()
+			if data['hop_num'][-1] == data['hop_num'][-2]: 
+				for key in ['energy', 'hop_num', 'accepted_hop_num']: 
+					data[key].pop()
 			f.close()
 	df = pd.DataFrame(data=data)
 
