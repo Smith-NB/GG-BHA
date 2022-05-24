@@ -50,7 +50,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 	break
 
 print()
-resultsfile = open("_CensoredData_%f" % -target_energy)
+resultsfile = open("_CensoredData_%f" % -target_energy, "w")
 t, status = zip(*sorted(zip(t, status)))
 for i in range(len(t)):
 	print("%d\t%d" % (t[i], status[i]))
