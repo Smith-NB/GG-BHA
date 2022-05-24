@@ -30,7 +30,8 @@ for roots, dirs, files in os.walk(os.getcwd()):
 	dirs.sort()
 	for d in dirs:
 		if not d.startswith("Trial"): continue
-
+		sys.stdout.write("\r%s        " % d)
+		sys.stdout.flush()
 		log = open("%s/log.txt" % d)
 		n_reseeds = 0
 		target_found = False
@@ -45,12 +46,16 @@ for roots, dirs, files in os.walk(os.getcwd()):
 				break
 		t.append(step + n_reseeds)
 		status.append(1 if target_found else 0)
-		
+		log.close()
 	break
 
+resultsfile = open("_CensoredData_%f" % -target_energy)
 t, status = zip(*sorted(zip(t, status)))
 for i in range(len(t)):
 	print("%d\t%d" % (t[i], status[i]))
+	resultsfile.write("%d\t%d" % (t[i], status[i]))
+
+resultsfile.close()
 
 
 
