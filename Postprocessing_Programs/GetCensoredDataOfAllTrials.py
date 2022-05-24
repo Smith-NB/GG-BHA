@@ -49,6 +49,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 		log.close()
 	break
 
+print()
 resultsfile = open("_CensoredData_%f" % -target_energy)
 t, status = zip(*sorted(zip(t, status)))
 for i in range(len(t)):
