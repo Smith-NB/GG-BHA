@@ -40,7 +40,7 @@ for roots, dirs, files in os.walk(os.getcwd()):
 				n_reseeds += 1
 				continue
 			e = float(line.split()[3][:-1])
-			step = int(line.split()[0][:-1])
+			step = int(line.split()[1][:-1])
 			if round(e, rounding) == round(target_energy, rounding):
 				target_found = True
 				break
