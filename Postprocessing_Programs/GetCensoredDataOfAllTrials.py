@@ -4,22 +4,22 @@ import os, sys
 
 
 rounding = None
-print("Please input the rounding to use: ", endswith='')
+print("Please input the rounding to use: ", end='')
 while rounding is None:
 	try:
 		rounding = int(input())
 	except ValueError:
 		rounding = None
-		print("Please input an integer value: ", endswith='')
+		print("Please input an integer value: ", end='')
 
 target_energy = None
-print("Please input the target energy to search for: ", endswith='')
+print("Please input the target energy to search for: ", end='')
 while target_energy is None:
 	try:
 		target_energy = float(input())
 	except ValueError:
 		target_energy = None
-		print("Please input a numerical value: ", endswith='')
+		print("Please input a numerical value: ", end='')
 
 
 
