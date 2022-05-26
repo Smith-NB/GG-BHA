@@ -28,8 +28,8 @@ for opt, arg in opts:
 			sys.exit()
 
 #except:
-	print("Error")
-	sys.exit()
+#	print("Error")
+#	sys.exit()
 
 sims = []
 traj = Trajectory("local_minima.traj")
