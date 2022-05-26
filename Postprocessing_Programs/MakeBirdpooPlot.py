@@ -45,8 +45,9 @@ def main(argv):
 	cmap = None
 	cmap_col = None
 	show_progress = False
+	alpha = 1
 	try:
-		opts, args = getopt.getopt(argv,"hdpf:y:t:c:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap="])
+		opts, args = getopt.getopt(argv,"hdpf:y:t:c:a:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=", "alpha="])
 	except getopt.GetoptError:
 		print_help()
 		sys.exit(2)
@@ -80,6 +81,13 @@ def main(argv):
 		elif opt in ("-c", "--cmap"):
 			cmap = arg
 			cmap_col = "hop_num"
+
+		elif opt in ("-a", "--alpha"):
+			try:
+				alpha = float(arg)
+			except ValueError:
+				print("Please input a float for alpha")
+				sys.exit(2)
 
 	data = {'energy': [], 'sim_to_GM': [], 'trial': [], 'hop_num': [], 'accepted_hop_num': []}
 	for t in trial_nums:
@@ -119,7 +127,7 @@ def main(argv):
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
-		plt.scatter(data=df, x='sim_to_GM', y='energy', s=1, alpha=0.1)
+		plt.scatter(data=df, x='sim_to_GM', y='energy', s=1, alpha=alpha)
 		plt.xlim((0, 100))
 	else:
 		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
