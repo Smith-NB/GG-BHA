@@ -35,6 +35,7 @@ sims = []
 traj = Trajectory("local_minima.traj")
 x = []
 i = 0
+print("Begin parsing trajectory")
 for cluster in traj:
 	cna = get_CNA_profile((cluster, [1.3549]))
 	sims.append(get_CNA_similarity(ref_CNA, cna))
