@@ -5,7 +5,7 @@ from BHA.T_SCM_Methods import get_CNA_profile, get_CNA_similarity
 from Postprocessing_Programs.ClusterStructures import get_structure
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
+import os, sys
 import getopt
 
 argv = sys.argv[1:]
