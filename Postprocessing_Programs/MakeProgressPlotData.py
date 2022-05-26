@@ -11,25 +11,24 @@ import getopt
 argv = sys.argv[1:]
 print("Starting script")
 print(argv)
-#try:
-opts, args = getopt.getopt(argv, "c:f:")
+try:
+	opts, args = getopt.getopt(argv, "c:f:")
 
-for opt, arg in opts:
-	if opt in ['-c']:
-		ref = get_structure(arg)
-		if ref is None:
-			print("Error; specified structure \'%s\' does not exist." % arg)
-			sys.exit()
-		ref_CNA = get_CNA_profile((ref, [1.3549]))
-	if opt in ['-f']:
-		fname = arg
-		if os.path.exists(fname):
-			print("specified file alread exists. Exiting")
-			sys.exit()
-
-#except:
-#	print("Error")
-#	sys.exit()
+	for opt, arg in opts:
+		if opt in ['-c']:
+			ref = get_structure(arg)
+			if ref is None:
+				print("Error; specified structure \'%s\' does not exist." % arg)
+				sys.exit()
+			ref_CNA = get_CNA_profile((ref, [1.3549]))
+		if opt in ['-f']:
+			fname = arg
+			if os.path.exists(fname):
+				print("specified file alread exists. Exiting")
+				sys.exit()
+except:
+	print("Error")
+	sys.exit()
 
 sims = []
 traj = Trajectory("local_minima.traj")

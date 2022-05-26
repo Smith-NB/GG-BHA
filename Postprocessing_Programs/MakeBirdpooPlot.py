@@ -119,7 +119,8 @@ def main(argv):
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
-		plt.scatter(data=df, x='sim_to_GM', y='energy', s=1)
+		plt.scatter(data=df, x='sim_to_GM', y='energy', s=1, alpha=0.1)
+		plt.xlim((0, 100))
 	else:
 		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
 		
