@@ -46,8 +46,9 @@ def main(argv):
 	cmap_col = None
 	show_progress = False
 	alpha = 1
+	ref = "sim_to_GM.txt"
 	try:
-		opts, args = getopt.getopt(argv,"hdpf:y:t:c:a:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=", "alpha="])
+		opts, args = getopt.getopt(argv,"hdpf:y:t:c:a:r:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=", "alpha=", "ref="])
 	except getopt.GetoptError:
 		print_help()
 		sys.exit(2)
@@ -89,19 +90,18 @@ def main(argv):
 				print("Please input a float for alpha")
 				sys.exit(2)
 
+		elif opt in ("-r", "--ref"):
+			ref = arg
+			ref_label = ref.replace(".txt", "")
+
 	data = {'energy': [], 'sim_to_GM': [], 'trial': [], 'hop_num': [], 'accepted_hop_num': []}
 	for t in trial_nums:
-
-		
-
-		if not os.path.exists("Trial%d/sim_to_GM.txt" % t):
-			pass#MakeSimToGM("Trial%d" % t)
 
 		if show_progress:
 			sys.stdout.write("\rParsing Trial%d                                " % t)
 			sys.stdout.flush()
 		
-		f = open("Trial%d/sim_to_GM.txt" % t)
+		f = open("Trial%d/%s" % (t, ref))
 		for line in f:
 			data['sim_to_GM'].append(float(line.strip()))
 			data['trial'].append(t)
