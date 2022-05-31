@@ -190,7 +190,8 @@ class BasinHopping_For_LJ104_Oh_DAC_Test():
 				cluster_old = self.restart_search_from_random_start()
 				self.hops_accepted_since_reseed = False
 
-				self.atoms = read("/scale_wlg_nobackup/filesets/nobackup/uoo03267/single_structure_hopping_trials/LJ104/cartesian_Displacement/DAC_test/starting_structure.xyz")
+				self.atoms = read("/scale_wlg_nobackup/filesets/nobackup/uoo03267/single_structure_hopping_trials/LJ104/cartesian_Displacement/DAC_test/starting_structure.xyzcture.xyz")
+				self.atoms.set_calculator(self.calc)
 				cluster_old = Cluster(composition=self.cluster_makeup, positions = self.positions.copy(), cell = self.cell)
 				cluster_old.BH_energy = self.get_transformed_energy(cluster_old.positions)
 				cluster_old.relaxed_positions = self.atoms.get_positions()
