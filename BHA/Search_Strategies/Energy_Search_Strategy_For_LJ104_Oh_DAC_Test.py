@@ -14,7 +14,7 @@ class Energy_Search_Strategy_For_LJ104_Oh_DAC_Test(Search_Strategy):
 		self.sim = None
 		self.ref = get_CNA_profile((get_structure("LJ104_ico"), [1.3549]))
 		self.use_relaxed = True
-		self.r_Cut = [1.3549]
+		self.r_Cut = 1.3549
 
 	def get_acceptance_boolean(self, cluster_old, cluster_new):
 
