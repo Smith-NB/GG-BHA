@@ -9,7 +9,7 @@ from ase.io import read
 
 from BHA.BH_Cluster import Cluster
 from BHA.BH_Initialise import initialise
-from BHA.Get_Starting_Structure import generate_random_structure
+from BHA.Get_Starting_Structure import generate_random_structure, get_calculator
 from BHA.Lock import lock_remove
 
 from BHA.T_SCM_Methods import get_CNA_similarity
@@ -95,6 +95,8 @@ class BasinHopping_For_LJ104_Oh_DAC_Test():
 		print("v1.1.4")
 		initialise(self)
 		self.atoms = read("starting_structure.xyz")
+		self.calc = get_calculator()
+		self.atoms.set_calculator(self.calc)
 
 	def run(self, steps):
 		"""
@@ -187,6 +189,13 @@ class BasinHopping_For_LJ104_Oh_DAC_Test():
 				#self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, False)
 				cluster_old = self.restart_search_from_random_start()
 				self.hops_accepted_since_reseed = False
+
+				self.atoms = read("starting_structure.xyz")
+				cluster_old = Cluster(composition=self.cluster_makeup, positions = self.positions.copy(), cell = self.cell)
+				cluster_old.BH_energy = self.get_transformed_energy(cluster_old.positions)
+				cluster_old.relaxed_positions = self.atoms.get_positions()
+				cluster_old.atoms = self.atoms.copy()
+				self.atoms.set_calculator(self.calc)
 				continue
 
 
