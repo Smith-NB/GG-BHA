@@ -1,0 +1,2 @@
+New in v1.1.5:
+	Added statements for defining calculator (RGL/Gupta)
