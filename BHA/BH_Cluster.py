@@ -25,6 +25,7 @@ class Cluster():
 		self.atoms = atoms
 		self.UID = uuid4()
 		print("Cluster UID: %s" % self.UID)
+
 	def has_CNA_profile(self):
 		return self.CNA_profile != None
 

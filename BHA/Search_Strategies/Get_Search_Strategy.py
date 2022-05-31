@@ -28,6 +28,9 @@ def get_search_strategy(search_strategy_information):
 		from BHA.Search_Strategies.Energy_And_Forbidden_Hops_Search_Strategy import Energy_And_Forbidden_Hops_Search_Strategy
 		return Energy_And_Forbidden_Hops_Search_Strategy(search_strategy_information)
 
+	elif strategy_name == 'energy_LJ104_Oh_DAC_test'
+		from BHA.Search_Strategies.Energy_Search_Strategy_For_LJ104_Oh_DAC_Test import Energy_Search_Strategy_For_LJ104_Oh_DAC_Test
+		return Energy_Search_Strategy_For_LJ104_Oh_DAC_Test(search_strategy_information)
 
 	else:
 		valid_names = ['energy', 'energy_plus_SCM', 'energy_plus_population_SCM', 'energy_minus_penalty', 'energy_and_forbidden_hops']
