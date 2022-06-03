@@ -43,10 +43,12 @@ def initialise(self):
         if self.logfile == '-':
             self.logfile = sys.stdout
         elif not path.exists(self.logfile):
-            self.logfile = open('log.txt', 'a')
+            self.logfile = open(self.logfile, 'a')
             self.log(-1, self.Emin, self.Emin, True, None)
         else:
-            self.logfile = open('log.txt', 'a')
+            self.logfile = open(self.logfile, 'a')
+    if isinstance(self.cnalog, str):
+        self.cnalog = open(self.cnalog, 'a')
 
 
 

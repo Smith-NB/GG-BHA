@@ -73,7 +73,9 @@ class BasinHopping():
 				 target_energies=None,
 				 rounding=2,
 				 adjust_cm=True,
-				 total_length_of_running_time = 1
+				 total_length_of_running_time = 1,
+				 r_Cut=None,
+				 cnalog="CNAlog.txt"
 				):
 		self.cluster_makeup = cluster_makeup
 		self.optimizer = optimizer
@@ -93,6 +95,8 @@ class BasinHopping():
 		self.adjust_cm = adjust_cm
 		self.total_length_of_running_time = total_length_of_running_time
 		self.calculator_information = calculator_information
+		self.r_Cut = r_Cut
+		self.cnalog = cnalog
 		print("v1.1.5")
 		initialise(self)
 
@@ -114,6 +118,7 @@ class BasinHopping():
 		cluster_old.BH_energy = self.get_transformed_energy(cluster_old.positions)
 		cluster_old.relaxed_positions = self.atoms.get_positions()
 		cluster_old.atoms = self.atoms.copy()
+		self.log_CNA(cluster_old)
 		#Complete the specified number of steps
 		for step in range(steps):
 			print("\n================================\n")
@@ -149,6 +154,7 @@ class BasinHopping():
 				self.hops_accepted_since_reseed = True
 				cluster_old = cluster_new
 				self.store_structure(self.lm_trajectory, self.atoms)
+				self.log_CNA(cluster_new)
 				self.atoms.set_positions(cluster_new.positions)
 
 			## Check if all target clusters have been located. ##
@@ -202,6 +208,17 @@ class BasinHopping():
 	def store_structure(self, storage_file, structure):
 		if storage_file is not None:
 			storage_file.write(structure)
+
+	def log_CNA(self, cluster):
+		if not cluster.has_CNA_profile():
+			cluster.calculate_CNA_profile(True, self.r_Cut)
+		cna_string = ""
+		for sig in cluster.CNA_profile[0]:
+			cna_string += "%d," % sig[0]
+			cna_string += "%d," % sig[1]
+			cna_string += "%d:" % sig[2]
+			cna_string += "%d;" % cna[sig]
+		self.cnalog.write("%s\n" % cna_string)
 
 	def restart_search_from_random_start(self):
 		self.atoms = generate_random_structure(self.cluster_makeup, self.boxtoplaceinlength, self.vacuumAdd)
