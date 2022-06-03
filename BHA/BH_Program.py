@@ -213,11 +213,12 @@ class BasinHopping():
 		if not cluster.has_CNA_profile():
 			cluster.calculate_CNA_profile(True, self.r_Cut)
 		cna_string = ""
+		#[0] as CNA_profiles are stored as single entry in a list (which should get fixed...)
 		for sig in cluster.CNA_profile[0]:
 			cna_string += "%d," % sig[0]
 			cna_string += "%d," % sig[1]
 			cna_string += "%d:" % sig[2]
-			cna_string += "%d;" % cna[sig]
+			cna_string += "%d;" % cluster.CNA_profile[0][sig]
 		self.cnalog.write("%s\n" % cna_string)
 
 	def restart_search_from_random_start(self):
