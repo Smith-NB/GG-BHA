@@ -22,7 +22,7 @@ class Population():
 		self.population_traj = Trajectory("population_history.traj", "a")
 		if len(self.population_traj) != 0:
 			self.population_traj.close() #close traj file to avoid simultaneous edit errors
-			self.controller.retrieve_resumption_info() #have the controller resume from logged info (editing traj file in the process)
+			self.controller.retrieve_resumption_info(self.population_information['calculator_information']) #have the controller resume from logged info (editing traj file in the process)
 			self.population_traj = Trajectory("population_history.traj", "r") #reopen the new traj file
 			for i in range(-self.size if self.size <= len(self.population_traj) else -len(self.population_traj), 0): #add the stored structure CNAs to the population (upto the population size)
 				self.cna_list.append(get_CNA_profile((self.population_traj[i], [self.r_Cut])))

@@ -68,6 +68,7 @@ class BasinHopping():
 				 optimizer_logfile=None,
 				 local_minima_trajectory='local_minima.traj',
 				 search_strategy_information={'search_strategy': 'energy', 'temperature': 1.0},
+				 calculator_information={'potential': 'LennardJones_ReducedUnits'},
 				 exit_when_targets_found=False,
 				 target_energies=None,
 				 rounding=2,
@@ -91,6 +92,7 @@ class BasinHopping():
 		self.rounding = rounding
 		self.adjust_cm = adjust_cm
 		self.total_length_of_running_time = total_length_of_running_time
+		self.calculator_information = calculator_information
 		print("v1.1.5")
 		initialise(self)
 
@@ -203,6 +205,7 @@ class BasinHopping():
 
 	def restart_search_from_random_start(self):
 		self.atoms = generate_random_structure(self.cluster_makeup, self.boxtoplaceinlength, self.vacuumAdd)
+		self.atoms.set_calculator(self.calculator)
 		cluster = Cluster(composition=self.cluster_makeup, positions = self.atoms.get_positions(), cell = self.cell)
 		cluster.BH_energy = self.get_transformed_energy(self.atoms.get_positions())
 		cluster.relaxed_positions = self.atoms.get_positions()

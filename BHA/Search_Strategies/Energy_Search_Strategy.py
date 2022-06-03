@@ -7,16 +7,34 @@ class Energy_Search_Strategy(Search_Strategy):
 
 		self.kT = self.search_strategy_information['temperature']
 		self.sim = None
+		self.r_Cut = 3.47646753
+		self.cnalog = open("CNAlog.txt", "a")
 
 	def get_acceptance_boolean(self, cluster_old, cluster_new):
 
+		if not cluster_new.has_CNA_profile():
+			cluster_new.calculate_CNA_profile(True, self.r_Cut)
+
 		if cluster_new.BH_energy < cluster_old.BH_energy:
+			self.log_CNA(cluster_new.CNA_profile)
 			return True
 			
 		probability = np.exp((cluster_old.BH_energy - cluster_new.BH_energy) / self.kT)
 		print("Chance to accept = " + str(probability))
 		accept = probability > np.random.uniform()
+		if accept: 
+			self.log_CNA(cluster_new.CNA_profile)
 		return accept
+
+	def log_CNA(self, cna):
+		cna = cna[0]
+		cna_string = ""
+		for sig in cna:
+			cna_string += "%d," % sig[0]
+			cna_string += "%d," % sig[1]
+			cna_string += "%d:" % sig[2]
+			cna_string += "%d;" % cna[sig]
+		self.cnalog.write("%s\n" % cna_string)
 
 	def handle_reseed_triggering(self):
 		super().handle_reseed_triggering()

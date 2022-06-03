@@ -9,6 +9,7 @@ def resume(self):
 	print("Attempting to resume the basin hopping algorithm from where the last run finished.")
 	if resuming_files_present(self):
 		self.atoms = get_latest_structure(self.lm_trajectory)
+		self.atoms.set_calculator(self.calculator)
 		self.rmin = get_latest_structure(self.lowest_trajectory).get_positions()
 
 		f = open('information_for_resuming.txt', 'r')

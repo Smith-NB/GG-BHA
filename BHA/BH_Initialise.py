@@ -1,7 +1,7 @@
 from BHA.Lock import lock_check_and_set
-from BHA.Get_Starting_Structure import generate_random_structure
 from BHA.Search_Strategies.Get_Search_Strategy import get_search_strategy
 from BHA.Reseed_Operators.Get_Reseed_Operator import get_reseed_operator
+from BHA.Get_Starting_Structure import get_calculator
 from BHA.Timer import Timer
 from ase.io.trajectory import Trajectory
 from os import path
@@ -15,6 +15,8 @@ def initialise(self):
     print_banner()
     print_self_information(self)
     
+
+    self.calculator = get_calculator(self.calculator_information)
     self.reseed_operator = get_reseed_operator(self.reseed_operator_information)
 
     if path.exists("information_for_resuming.txt"):
@@ -23,7 +25,11 @@ def initialise(self):
     else:
         from BHA.BH_Start_New import start_new
         start_new(self)
-        
+    
+
+    #Get Calculator from calculator information
+    
+
     if self.adjust_cm:
         self.cm = self.atoms.get_center_of_mass()
     else:
@@ -54,6 +60,7 @@ def initialise(self):
     self.timer = Timer(self.total_length_of_running_time)
     for element, no_of_element in self.cluster_makeup.items():
         self.cluster_chemical_formula += str(element+str(no_of_element))
+
 
 def print_banner():
     """

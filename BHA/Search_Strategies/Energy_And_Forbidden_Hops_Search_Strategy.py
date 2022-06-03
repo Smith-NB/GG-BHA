@@ -26,6 +26,9 @@ class Energy_And_Forbidden_Hops_Search_Strategy(Search_Strategy):
 		self.search_strategy_information['population_information']['population_controller_information']['reseed_operator_pointer'] = self.reseed_operator_pointer
 		self.population = Population(self.search_strategy_information['population_information'])
 		self.sim = None
+		self.cnalog = open("CNAlog.txt", "a")
+
+
 
 	def get_acceptance_boolean(self, cluster_old, cluster_new):
 
@@ -52,12 +55,26 @@ class Energy_And_Forbidden_Hops_Search_Strategy(Search_Strategy):
 				self.forbidden_traj.write(cluster_new.atoms)
 			return False
 		elif cluster_new.BH_energy < cluster_old.BH_energy: #accept hop if it is not forbidden and is lower in energy
+			self.log_CNA(cluster_new.CNA_profile)
 			return True
 		else:	#calculate chance to accept hop based on Boltzmann distribution
 			probability = np.exp((cluster_old.BH_energy - cluster_new.BH_energy) / self.kT)
 			print("Chance to accept = " + str(probability))
 			accept = probability > np.random.uniform()
+
+		if accept: 
+			self.log_CNA(cluster_new.CNA_profile)
 			return accept
+
+	def log_CNA(self, cna):
+		cna = cna[0]
+		cna_string = ""
+		for sig in cna:
+			cna_string += "%d," % sig[0]
+			cna_string += "%d," % sig[1]
+			cna_string += "%d:" % sig[2]
+			cna_string += "%d;" % cna[sig]
+		self.cnalog.write("%s\n" % cna_string)
 
 	def handle_reseed_triggering(self):
 		print("EAFHSS-RESEEDING")

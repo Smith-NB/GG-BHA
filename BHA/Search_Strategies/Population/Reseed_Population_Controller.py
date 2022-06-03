@@ -64,7 +64,7 @@ class Reseed_Population_Controller(Population_Controller):
 
 		f.write("reseed_triggered_last_hop: %s" % str(self.reseed_triggered_last_hop))
 	
-	def retrieve_resumption_info(self):
+	def retrieve_resumption_info(self, calculator_information):
 		from collections import Counter
 		from ase.io import Trajectory
 		from BHA.BH_Cluster import Cluster
@@ -103,7 +103,7 @@ class Reseed_Population_Controller(Population_Controller):
 			os.remove('temp.xyz')
 
 			#Create BHA.BH_Cluster Object
-			lj = get_calculator()
+			lj = get_calculator(calculator_information)
 			self.current_LES_since_last_update.set_calculator(lj)
 			e = self.current_LES_since_last_update.get_potential_energy()
 			rawcomp = self.current_LES_since_last_update.get_chemical_symbols()
