@@ -11000,5 +11000,5 @@ def get_structure(structure):
       return LJ98_FCCs()
    elif structure == ("LJ75_FCC"):
       return LJ75_FCC()
-   elif structure == "Au55_LESs"
+   elif structure == "Au55_LESs":
       return Au55_LESs()
