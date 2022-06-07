@@ -105,7 +105,13 @@ def main(argv):
 				sys.exit(2)
 
 		elif opt in ("-r", "--ref"):
-			ref = arg
+			ref = arg.strip().split(',')
+			if len(ref) == 2:
+				refi = ref[1]
+				ref = ref[0]
+			else:
+				ref = ref[0]
+				refi = 0
 			ref_label = ref.replace(".txt", "")
 
 		elif opt in ("-e", "--end"):
@@ -124,7 +130,7 @@ def main(argv):
 		
 		f = open("Trial%d/%s" % (t, ref))
 		for line in f:
-			data['sim_to_GM'].append(float(line.strip()))
+			data['sim_to_GM'].append(float(line.strip().split()[refi]))
 			data['trial'].append(t)
 		f.close()			
 
