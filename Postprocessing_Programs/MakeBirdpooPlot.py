@@ -137,7 +137,7 @@ def main(argv):
 		if os.path.exists("Trial%d/log.txt" % t):
 			f = open("Trial%d/log.txt" % t)
 			accepted_hop_num = 0
-			f.readline() #skip first line/entry/cluster
+			#f.readline() #skip first line/entry/cluster
 			for line in f:
 				if "RESEED" in line:
 					continue
