@@ -108,7 +108,7 @@ def main(argv):
 			ref = arg.strip().split(',')
 			if len(ref) == 2:
 				refi = ref[1]
-				ref = ref[0]
+				ref = int(ref[0])
 			else:
 				ref = ref[0]
 				refi = 0
