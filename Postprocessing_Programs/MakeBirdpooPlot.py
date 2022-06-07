@@ -107,8 +107,8 @@ def main(argv):
 		elif opt in ("-r", "--ref"):
 			ref = arg.strip().split(',')
 			if len(ref) == 2:
-				refi = ref[1]
-				ref = int(ref[0])
+				refi = int(ref[1])
+				ref = ref[0]
 			else:
 				ref = ref[0]
 				refi = 0
