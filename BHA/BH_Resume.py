@@ -19,7 +19,7 @@ def resume(self):
 		self.Emin_found_at = int(f.readline().split(':')[1])
 		self.reseed_operator.E_to_beat = float(f.readline().split(':')[1])
 		self.reseed_operator.steps_since_improvement = int(f.readline().split(':')[1])
-		self.hops_accepted_since_reseed = f.readline().split(':')[1] == "True"
+		self.hops_accepted_since_reseed = f.readline().split(':')[1].strip() == "True"
 		
 		if not self.hops_accepted_since_reseed:
 			self.atoms = generate_random_structure(self.cluster_makeup, self.boxtoplaceinlength, self.vacuumAdd)
