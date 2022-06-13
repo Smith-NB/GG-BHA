@@ -23,6 +23,7 @@ def resume(self):
 		
 		if not self.hops_accepted_since_reseed:
 			self.atoms = generate_random_structure(self.cluster_makeup, self.boxtoplaceinlength, self.vacuumAdd)
+			self.atoms.set_calculator(self.calculator)
 
 		target_energies_check = f.readline().strip().split(':')[1].split(',')
 		for i in range(len(target_energies_check)):
