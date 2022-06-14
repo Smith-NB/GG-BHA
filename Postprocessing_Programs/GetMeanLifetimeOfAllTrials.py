@@ -21,13 +21,17 @@ def linear_regression_confidene_interval(datum, N0, confidence=0.95):
 	y = [] #N(t), i.e. number of trials remaining
 	for i in range(len(x)):
 		y.append(np.log(N0-i-1))
-	lin_reg = scipy.stats.linregress(x, y)
-	ci_lambda = lin_reg.stderr * scipy.stats.t.ppf((1 + confidence) / 2., len(x)-2)
-	ci_rel = ci_lambda/lin_reg.slope
 
-	tau = -1/lin_reg.slope
-	ci_tau = -tau * ci_rel
-	return tau, ci_tau
+	try:
+		lin_reg = scipy.stats.linregress(x, y)
+		ci_lambda = lin_reg.stderr * scipy.stats.t.ppf((1 + confidence) / 2., len(x)-2)
+		ci_rel = ci_lambda/lin_reg.slope
+
+		tau = -1/lin_reg.slope
+		ci_tau = -tau * ci_rel
+		return tau, ci_tau
+	except ValueError:
+		return 0, 0
 
 print("Please input energy rounding (dp): ", end='')
 dp_rounding = None
