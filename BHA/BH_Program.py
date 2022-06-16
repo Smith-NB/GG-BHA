@@ -1,5 +1,6 @@
 #Test edit for git
 import numpy as np
+import sys
 
 #from ase.visualize import view
 from ase.optimize.fire import FIRE
@@ -97,7 +98,7 @@ class BasinHopping():
 		self.calculator_information = calculator_information
 		self.r_Cut = r_Cut
 		self.cnalog = cnalog
-		print("v1.1.5")
+		print("v1.1.5.1")
 		initialise(self)
 
 	def run(self, steps):
@@ -118,9 +119,18 @@ class BasinHopping():
 		cluster_old.BH_energy = self.get_transformed_energy(cluster_old.positions)
 		cluster_old.relaxed_positions = self.atoms.get_positions()
 		cluster_old.atoms = self.atoms.copy()
-		self.log_CNA(cluster_old)
+		print("STEPS COMPLETED: ", self.steps_completed)
+		if self.steps_completed == 0:
+			self.log_CNA(cluster_old)
+
+		if self.steps_completed == steps:
+			print("The specified number of steps have already been completed in prior runs")
+			print("\nThe basin hopping algorithm will now exit safely.")
+			lock_remove() 
+			sys.exit()
+
 		#Complete the specified number of steps
-		for step in range(steps):
+		for step in range(self.steps_completed, steps):
 			print("\n================================\n")
 			print("Attempting step " + str(step) + ".")
 
@@ -137,7 +147,7 @@ class BasinHopping():
 			if cluster_new.BH_energy < self.Emin:
 				print("A new overall LES has been found.")
 				self.Emin = cluster_new.BH_energy
-				self.Emin_found_at = step + self.steps_completed
+				self.Emin_found_at = step
 				self.rmin = self.atoms.get_positions() #relaxed positions               
 				self.store_structure(self.lowest_trajectory, self.atoms)			
 					
@@ -147,7 +157,7 @@ class BasinHopping():
 			accept = self.search_strategy.get_acceptance_boolean(cluster_old, cluster_new)
 			accept_str = "accepted." if accept else "rejected."
 			print("The current step has been " + accept_str)
-			self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, accept, self.search_strategy.sim)
+			self.log(step , cluster_new.BH_energy, self.Emin, accept, self.search_strategy.sim)
 
 			## If this step has been accepted, update cluster_old and log relevant info. ##
 			if accept:
@@ -161,7 +171,7 @@ class BasinHopping():
 			if self.exit_when_targets_found:
 				for i in range(len(self.target_energies)):
 					if self.targets_found[i] == False and round(cluster_new.BH_energy, self.rounding) == self.target_energies[i]:
-						self.targets_found[i] = step + self.steps_completed
+						self.targets_found[i] = step
 				if not False in self.targets_found:
 					print('All target clusters found based on energy.')
 					
@@ -174,7 +184,7 @@ class BasinHopping():
 					for i in range(1, len(self.targets_found)):
 						print(', %d' % self.targets_found[i], end='')
 					print()
-					self.log(step + self.steps_completed, cluster_new.BH_energy, self.Emin, accept)
+					self.log(step, cluster_new.BH_energy, self.Emin, accept)
 					self.log_resumption_info(step, cluster_new.BH_energy)
 					break
 				"""
@@ -237,7 +247,7 @@ class BasinHopping():
 	def log_resumption_info(self, step, energy):
 		print("\nLogging resumption information for any future runs.")
 		f = open("information_for_resuming.txt", 'w')
-		f.write("Steps_completed:" + str(step + self.steps_completed + 1))
+		f.write("Steps_completed:" + str(step + 1))
 		f.write("\nMinimum_energy:" + str(self.Emin))
 		f.write("\nMinimum_energy_found_at_step:" + str(self.Emin_found_at))
 		f.write("\nreseed_energy_to_beat:" + str(self.reseed_operator.E_to_beat))
