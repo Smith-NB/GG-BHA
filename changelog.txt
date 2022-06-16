@@ -1,2 +1,8 @@
 New in v1.1.5:
 	Added statements for defining calculator (RGL/Gupta)
+
+New in v1.1.5.1
+	Changed for loop in BH_Program.run(steps) such that steps now defines the total number of steps/hops
+	to be performed, including hops performed in previous runs of the given trial.
+	e.g. if steps = 1000 and 500 steps have already been performed in a run, only 500 further steps will 
+	be performed instead of another 1000.
