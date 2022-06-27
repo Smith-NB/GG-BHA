@@ -160,7 +160,7 @@ def main(argv):
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
-		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=1, alpha=alpha)
+		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=1)
 		plt.xlim((0, 100))
 		plt.ylim(ylim)
 	else:
