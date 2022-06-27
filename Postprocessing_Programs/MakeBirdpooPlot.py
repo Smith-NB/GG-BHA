@@ -160,11 +160,11 @@ def main(argv):
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
-		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=1)
+		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=1, alpha=alpha)
 		plt.xlim((0, 100))
 		plt.ylim(ylim)
 	else:
-		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim, alpha=alpha)
+		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
 		
 		if cmap_col is None:
 			grid.map(plt.scatter, "sim_to_GM", "energy", s=1, alpha=alpha)
