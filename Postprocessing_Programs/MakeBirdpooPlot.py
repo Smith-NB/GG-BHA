@@ -164,12 +164,12 @@ def main(argv):
 		plt.xlim((0, 100))
 		plt.ylim(ylim)
 	else:
-		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
+		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim, alpha=alpha)
 		
 		if cmap_col is None:
-			grid.map(plt.scatter, "sim_to_GM", "energy", s=1)
+			grid.map(plt.scatter, "sim_to_GM", "energy", s=1, alpha=alpha)
 		else:
-			grid.map(custom_scatter, "sim_to_GM", "energy", cmap_col, s=1, cmap=cmap)
+			grid.map(custom_scatter, "sim_to_GM", "energy", cmap_col, s=1, cmap=cmap, alpha=alpha)
 
 		grid.set_titles(col_template="")
 
