@@ -57,6 +57,7 @@ def main(argv):
 	show_progress = False
 	alpha = 1
 	ref = "sim_to_GM.txt"
+	refi = 0
 	end = None
 	try:
 		opts, args = getopt.getopt(argv,"hdpf:y:t:c:a:r:e:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=", "alpha=", "ref=", "end="])
@@ -130,7 +131,10 @@ def main(argv):
 		
 		f = open("Trial%d/%s" % (t, ref))
 		for line in f:
-			data['sim_to_GM'].append(float(line.strip().split()[refi]))
+			if refi == 0:
+				data['sim_to_GM'].append(float(line.strip()))
+			else:
+				data['sim_to_GM'].append(float(line.strip().split()[refi]))
 			data['trial'].append(t)
 		f.close()			
 
