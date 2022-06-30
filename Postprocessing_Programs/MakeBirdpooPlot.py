@@ -171,7 +171,7 @@ def main(argv):
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
-		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=s, alpha=alpha)
+		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', c=cmap_col, cmap=cmap, s=s, alpha=alpha)
 		plt.xlim((0, 100))
 		plt.ylim(ylim)
 	else:
