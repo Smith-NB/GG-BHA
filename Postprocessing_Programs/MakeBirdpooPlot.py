@@ -147,7 +147,7 @@ def main(argv):
 					continue
 				elif "accepted True" in line:
 					data['energy'].append(float(line.split()[3][:-1]))
-					data['hop_num'].append(int(line.split()[1][:-1])**2)
+					data['hop_num'].append(np.log(int(line.split()[1][:-1])))
 					data['accepted_hop_num'].append(accepted_hop_num)
 					accepted_hop_num += 1
 			#remove final line for completed trials
