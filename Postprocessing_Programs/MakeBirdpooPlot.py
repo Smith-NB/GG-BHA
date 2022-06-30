@@ -33,8 +33,11 @@ def print_help():
 	help_string += '\t\tDefault = \'sim_to_GM.txt\'.\n'
 	help_string += '\t\tlong option: --ref\n'
 	help_string += '\t-e:\tEnd point\n'
-	help_string += '\t\tSpecified how many data points to plot before stopping.\n'
+	help_string += '\t\tSpecifies how many data points to plot before stopping.\n'
 	help_string += 'Default = None.\n'
+	help_string += '\t-e:\tSize\n'
+	help_string += '\t\tSpecifies size of datapoints to plot.\n'
+	help_string += 'Default = 1.\n'
 	help_string += '\t\tlong option: --end\n'
 	print(help_string)
 	return
@@ -56,11 +59,12 @@ def main(argv):
 	cmap_col = None
 	show_progress = False
 	alpha = 1
+	s = 1
 	ref = "sim_to_GM.txt"
 	refi = 0
 	end = None
 	try:
-		opts, args = getopt.getopt(argv,"hdpf:y:t:c:a:r:e:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=", "alpha=", "ref=", "end="])
+		opts, args = getopt.getopt(argv,"hdpf:y:t:c:a:r:e:s:",["help", "display", "progress", "filename=", "ylim=", "trial_nums=", "cmap=", "alpha=", "ref=", "end=", "size="])
 	except getopt.GetoptError:
 		print_help()
 		sys.exit(2)
@@ -102,7 +106,7 @@ def main(argv):
 				print("Please input a float for alpha")
 				sys.exit(2)
 			if alpha > 1 or alpha < 0:
-				print("Value must be between 0 and 1. Exitting")
+				print("Value must be between 0 and 1 for -a. Exitting")
 				sys.exit(2)
 
 		elif opt in ("-r", "--ref"):
@@ -119,8 +123,15 @@ def main(argv):
 			try: 
 				end = int(arg)
 			except ValueError:
-				print("Please input integer value. Exitting")
+				print("Please input integer value for -e. Exitting")
 				sys.exit(2)
+
+		elif opt in ("-s", "--size"):
+				try:
+					s = float(arg)
+				except ValueError:
+					print("Please input float value for -s. Exitting")
+					sys.exit(2)
 
 	data = {'energy': [], 'sim_to_GM': [], 'trial': [], 'hop_num': [], 'accepted_hop_num': []}
 	for t in trial_nums:
@@ -160,16 +171,16 @@ def main(argv):
 	df = pd.DataFrame(data=data)
 
 	if len(trial_nums) == 1:
-		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=1, alpha=alpha)
+		plt.scatter(data=df[:end], x='sim_to_GM', y='energy', s=s, alpha=alpha)
 		plt.xlim((0, 100))
 		plt.ylim(ylim)
 	else:
 		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
 		
 		if cmap_col is None:
-			grid.map(plt.scatter, "sim_to_GM", "energy", s=1, alpha=alpha)
+			grid.map(plt.scatter, "sim_to_GM", "energy", s=s, alpha=alpha)
 		else:
-			grid.map(custom_scatter, "sim_to_GM", "energy", cmap_col, s=1, cmap=cmap, alpha=alpha)
+			grid.map(custom_scatter, "sim_to_GM", "energy", cmap_col, s=s, cmap=cmap, alpha=alpha)
 
 		grid.set_titles(col_template="")
 
