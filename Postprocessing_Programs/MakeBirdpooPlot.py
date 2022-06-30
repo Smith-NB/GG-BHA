@@ -175,7 +175,7 @@ def main(argv):
 		plt.xlim((0, 100))
 		plt.ylim(ylim)
 	else:
-		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim)
+		grid = sns.FacetGrid(df, col="trial", col_wrap=2, ylim=ylim, xlim=(0,100))
 		
 		if cmap_col is None:
 			grid.map(plt.scatter, "sim_to_GM", "energy", s=s, alpha=alpha)
