@@ -76,7 +76,8 @@ class BasinHopping():
 				 adjust_cm=True,
 				 total_length_of_running_time = 1,
 				 r_Cut=None,
-				 cnalog="CNAlog.txt"
+				 cnalog="CNAlog.txt",
+				 log_rejected_CNAs = False
 				):
 		self.cluster_makeup = cluster_makeup
 		self.optimizer = optimizer
@@ -98,6 +99,7 @@ class BasinHopping():
 		self.calculator_information = calculator_information
 		self.r_Cut = r_Cut
 		self.cnalog = cnalog
+		self.log_rejected_CNAs = log_rejected_CNAs
 		print("v1.1.5.1")
 		initialise(self)
 
@@ -166,7 +168,9 @@ class BasinHopping():
 				self.store_structure(self.lm_trajectory, self.atoms)
 				self.log_CNA(cluster_new)
 				self.atoms.set_positions(cluster_new.positions)
-
+			elif self.log_rejected_CNAs:
+				self.log_CNA(cluster_new)
+				
 			## Check if all target clusters have been located. ##
 			if self.exit_when_targets_found:
 				for i in range(len(self.target_energies)):
