@@ -11059,6 +11059,8 @@ def get_structure(structure):
       return LJ77_ico()
    elif structure == ("LJ98_FCCs"):
       return LJ98_FCCs()
+   elif structure == ("LJ98_Oh"):
+      return LJ98_FCCs()[0]
    elif structure == ("LJ75_FCC"):
       return LJ75_FCC()
    elif structure == "Au55_LESs":

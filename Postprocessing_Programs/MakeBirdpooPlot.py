@@ -150,7 +150,7 @@ def main(argv):
 		f.close()			
 
 		if os.path.exists("Trial%d/log.txt" % t):
-			f = open("Trial%d/log.txt" % t)
+			f = open("Trial%d/log.txt" % t); f.readline()
 			accepted_hop_num = 0
 			#f.readline() #skip first line/entry/cluster
 			for line in f:
