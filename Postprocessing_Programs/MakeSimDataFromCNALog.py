@@ -22,7 +22,7 @@ for opt, arg in opts:
 		msg = "The following command line arguments are available\n"
 		msg += "-h:\tprint this message."
 		msg += "-r:\tspecify reference structure from ClusterStructures\n\tor as xyz file in local dir.\n"
-		msg += "-t:\tspecify trials to run script in as numbers, comma delimited."
+		msg += "-t:\tspecify trials to run script in as numbers, comma delimited, OR range, colon delimited."
 		msg += "-c:\tspecify rCut."
 		print(msg)
 		sys.exit()
@@ -32,7 +32,13 @@ for opt, arg in opts:
 		else:
 			ref = get_structure(arg)
 	elif opt == "-t":
-		trials = [int(t) for t in  arg.split(',')]
+		if "," in arg:
+			trials = [int(t) for t in  arg.split(',')]
+		elif ":" in arg:
+			trange = [int(t) for t in arg.split(':')]
+			trials = []
+			for i in range(trange[0], trange[1]):
+				trials.append(i)
 	elif opt == "-c":
 		rCut = float(arg)
 	elif opt == "-f":

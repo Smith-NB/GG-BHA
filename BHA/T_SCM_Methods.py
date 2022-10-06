@@ -27,6 +27,8 @@ def get_total_CNA_profile(input_data, return_list):
 	(system,rCut) = input_data
 	fullCNA_atoms = FullCNA(system,rCut)
 	_,total_CNA_profile = fullCNA_atoms.get_normal_and_total_cna()
+	#print("normal", nCNA)
+	#print("raw", fullCNA_atoms.get_raw_cna())
 	#return Counter(total_CNA_profile)
 	return_list.append(Counter(total_CNA_profile))
 
