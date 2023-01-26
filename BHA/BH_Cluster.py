@@ -1,5 +1,6 @@
 from ase import Atoms
 from BHA.T_SCM_Methods import get_CNA_profile
+from asap3.analysis.localstructure import FullCNA
 from uuid import uuid4
 
 class Cluster():
@@ -34,6 +35,10 @@ class Cluster():
 
 	def calculate_CNA_profile(self, use_relaxed, r_Cut):
 		if use_relaxed:
-			self.CNA_profile = get_CNA_profile((Atoms(positions = self.relaxed_positions, cell = self.cell), [r_Cut]))
+			fcna = FullCNA((Atoms(positions = self.relaxed_positions, cell = self.cell), r_Cut)
+			self.CNA_profile = [Counter(fcna.get_total_cna())]
+			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.relaxed_positions, cell = self.cell), [r_Cut]))
 		else:
-			self.CNA_profile = get_CNA_profile((Atoms(positions = self.positions, cell = self.cell), [r_Cut]))
+			fcna = FullCNA((Atoms(positions = self.positions, cell = self.cell), r_Cut)
+			self.CNA_profile = [Counter(fcna.get_total_cna())]
+			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.positions, cell = self.cell), [r_Cut]))
