@@ -24,6 +24,7 @@ for opt, arg in opts:
 		msg += "-r:\tspecify reference structure from ClusterStructures\n\tor as xyz file in local dir.\n"
 		msg += "-t:\tspecify trials to run script in as numbers, comma delimited, OR range, colon delimited."
 		msg += "-c:\tspecify rCut."
+		msg += "-f:\tspecify filename.\n"
 		print(msg)
 		sys.exit()
 	elif opt == "-r":
@@ -48,7 +49,8 @@ if None in [ref, rCut, trials, out_fname]:
 	print("All arguments are required. Use -h for help")
 
 ref.CNA = get_CNA_profile((ref, [rCut]))
-for t in trials:
+for t in trials:	
+	if os.path.exists("Trial%d/%s" % (t, out_fname)): continue
 	cnalog = open("Trial%d/CNAlog.txt" % t)
 	simFile = open("Trial%d/%s" % (t, out_fname), "w")
 	i = 0	
