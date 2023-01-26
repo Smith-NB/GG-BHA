@@ -35,10 +35,10 @@ class Cluster():
 
 	def calculate_CNA_profile(self, use_relaxed, r_Cut):
 		if use_relaxed:
-			fcna = FullCNA((Atoms(positions = self.relaxed_positions, cell = self.cell), r_Cut)
+			fcna = FullCNA((Atoms(positions = self.relaxed_positions, cell = self.cell), r_Cut))
 			self.CNA_profile = [Counter(fcna.get_total_cna())]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.relaxed_positions, cell = self.cell), [r_Cut]))
 		else:
-			fcna = FullCNA((Atoms(positions = self.positions, cell = self.cell), r_Cut)
+			fcna = FullCNA((Atoms(positions = self.positions, cell = self.cell), r_Cut))
 			self.CNA_profile = [Counter(fcna.get_total_cna())]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.positions, cell = self.cell), [r_Cut]))
