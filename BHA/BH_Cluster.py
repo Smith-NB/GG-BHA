@@ -41,12 +41,22 @@ class Cluster():
 		if use_relaxed:
 			a = Atoms(formula, positions = self.relaxed_positions, cell = self.cell)
 			fcna = FullCNA(a, r_Cut)
-			cna = fcna.get_normal_cna()
-			self.CNA_profile = [Counter(cna)]
+			ncna = fcna.get_normal_cna()
+			cna = Counter()
+			for atom in ncna:
+				cna += atom
+			for sig in cna:
+				cna[sig] = int(cna[sig]/2)
+			self.CNA_profile = [cna]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.relaxed_positions, cell = self.cell), [r_Cut]))
 		else:
 			a = Atoms(formula, positions = self.positions, cell = self.cell)
 			fcna = FullCNA(a, r_Cut)
-			cna = fcna.get_normal_cna()
-			self.CNA_profile = [Counter(cna)]
+			ncna = fcna.get_normal_cna()
+			cna = Counter()
+			for atom in ncna:
+				cna += atom
+			for sig in cna:
+				cna[sig] = int(cna[sig]/2)
+			self.CNA_profile = [cna]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.positions, cell = self.cell), [r_Cut]))
