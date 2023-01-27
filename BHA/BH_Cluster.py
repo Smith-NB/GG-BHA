@@ -37,10 +37,10 @@ class Cluster():
 		formula = ""
 		for element in self.composition: formula += str(element) + str(self.composition[element])
 		if use_relaxed:
-			fcna = FullCNA((Atoms(positions = self.relaxed_positions, cell = self.cell), r_Cut))
+			fcna = FullCNA((Atoms(formula, positions = self.relaxed_positions, cell = self.cell), r_Cut))
 			self.CNA_profile = [Counter(fcna.get_total_cna())]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.relaxed_positions, cell = self.cell), [r_Cut]))
 		else:
-			fcna = FullCNA((Atoms(positions = self.positions, cell = self.cell), r_Cut))
+			fcna = FullCNA((Atoms(formula, positions = self.positions, cell = self.cell), r_Cut))
 			self.CNA_profile = [Counter(fcna.get_total_cna())]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.positions, cell = self.cell), [r_Cut]))
