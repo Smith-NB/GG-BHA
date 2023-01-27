@@ -34,6 +34,8 @@ class Cluster():
 		return self.BH_energy != None
 
 	def calculate_CNA_profile(self, use_relaxed, r_Cut):
+		print(self.composition)
+		print(self.atoms)
 		if use_relaxed:
 			fcna = FullCNA((Atoms(positions = self.relaxed_positions, cell = self.cell), r_Cut))
 			self.CNA_profile = [Counter(fcna.get_total_cna())]
