@@ -47,6 +47,6 @@ class Cluster():
 		else:
 			a = Atoms(formula, positions = self.positions, cell = self.cell)
 			fcna = FullCNA(a, r_Cut)
-			cna = fcna.get_total_cna()
+			cna = fcna.get_normal_cna()
 			self.CNA_profile = [Counter(cna)]
 			#self.CNA_profile = get_CNA_profile((Atoms(positions = self.positions, cell = self.cell), [r_Cut]))
