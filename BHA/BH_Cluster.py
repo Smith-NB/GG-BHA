@@ -1,6 +1,7 @@
 from ase import Atoms
 from BHA.T_SCM_Methods import get_CNA_profile
 from asap3.analysis.localstructure import FullCNA
+from collections import Counter
 from uuid import uuid4
 
 class Cluster():
