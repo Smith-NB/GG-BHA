@@ -1,3 +1,3 @@
 # GG-BHA
 
-Garden Group Basin Hopping Algorithm v1.1.4
+Garden Group Basin Hopping Algorithm v1.1.5.2
