@@ -2,7 +2,7 @@
 # The information about the Organisms program
 
 __name__    = 'Garden Group Basin Hopping Algorithm'
-__version__ = '1.0.7'
+__version__ = '1.1.5.2'
 __author__  = 'Nicholas Smith and Dr. Anna Garden'
 
 import sys
@@ -17,7 +17,7 @@ if sys.version_info[0] == 2:
 	toString += '================================================'+'\n'
 	raise ImportError(toString)
 
-__author_email__ = 'anna.garden@otago.ac.nz'
+__author_email__ = 'smini250@student.otago.ac.nz'
 __license__ = 'None'
 __url__ = 'to be added'
 __doc__ = 'to be added'
